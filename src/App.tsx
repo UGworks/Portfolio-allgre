@@ -1,0 +1,43 @@
+import { useState } from 'react';
+import Header from './components/Header';
+import PortfolioLayout from './components/PortfolioLayout';
+import GeneralInfoPanel from './components/GeneralInfoPanel';
+import AboutPage from './components/AboutPage';
+import { projects, info } from './data';
+import { Project } from './types';
+
+function App() {
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Header onSectionChange={setActiveSection} />
+      {activeSection === 'works' && (
+        <>
+          <PortfolioLayout 
+            projects={projects} 
+            onProjectChange={setActiveProject}
+          />
+          <GeneralInfoPanel activeProject={activeProject} />
+        </>
+      )}
+      {activeSection === 'about' && <AboutPage />}
+      {activeSection === 'contact' && (
+        <div className="fixed top-16 right-0 w-96 h-[calc(100vh-4rem)] overflow-y-auto bg-white z-30 border-l border-gray-200 p-8">
+          <h1 className="text-4xl font-bold mb-4">연락주세요</h1>
+          <p className="text-base font-light mb-4">Get in touch</p>
+          <a
+            href={`mailto:${info.email}`}
+            className="text-lg font-normal hover:opacity-70 transition-opacity"
+          >
+            {info.email}
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
+
