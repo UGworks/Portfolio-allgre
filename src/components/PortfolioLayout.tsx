@@ -72,10 +72,7 @@ const PortfolioLayout = ({
       imageAutoTransitionRef.current = setTimeout(() => {
         // 현재 인덱스가 변경되지 않았을 때만 전환
         if (activeIndexRef.current === activeIndex) {
-          const nextIndex = activeIndex + 1;
-          
-          // 프로그래밍 방식 스크롤 플래그 설정
-          isProgrammaticScrollRef.current = true;
+          const nextIndex = (activeIndex + 1) % projects.length; // 순환
           
           activeIndexRef.current = nextIndex;
           setActiveIndex(nextIndex);
@@ -86,15 +83,10 @@ const PortfolioLayout = ({
           
           // 스크롤 위치 업데이트
           const scrollTo = (nextIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
-          window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+          window.scrollTo({ top: scrollTo, behavior: 'auto' });
           
-          // 자동 전환 플래그는 즉시 해제하여 다음 전환이 가능하도록
-          // 스크롤 플래그만 짧게 유지
+          // 자동 전환 플래그 해제
           isAutoTransitioningRef.current = false;
-          
-          setTimeout(() => {
-            isProgrammaticScrollRef.current = false;
-          }, 400);
         } else {
           isAutoTransitioningRef.current = false;
         }
