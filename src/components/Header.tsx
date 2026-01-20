@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { info } from '../data';
 
 interface HeaderProps {
   onSectionChange?: (section: 'works' | 'about' | 'contact') => void;
+  isIntro?: boolean;
+  introDelayMs?: number;
 }
 
-const Header = ({ onSectionChange }: HeaderProps) => {
+const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, introDelayMs = 0 }) => {
   const [currentTime, setCurrentTime] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -29,7 +31,7 @@ const Header = ({ onSectionChange }: HeaderProps) => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.6, ease: 'easeInOut', delay: isIntro ? introDelayMs / 1000 : 0 }}
       className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200"
     >
       <nav className="w-full mx-auto px-6 lg:px-8 py-4">
