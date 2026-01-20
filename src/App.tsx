@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import PortfolioLayout from './components/PortfolioLayout';
 import GeneralInfoPanel from './components/GeneralInfoPanel';
@@ -9,17 +9,54 @@ import { Project } from './types';
 function App() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
+  const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
+  const [isWheeling, setIsWheeling] = useState(false);
+  const introHeaderDelayMs = 0;
+  const introSidebarDelayMs = 600;
+  const introMaskDelayMs = 1200;
+  const introMaskDurationMs = 2000;
+  const introInfoDelayMs = introMaskDelayMs + introMaskDurationMs;
+  const introContentDelayMs = introMaskDelayMs + introMaskDurationMs;
+  const introTotalMs = introContentDelayMs + 400;
+
+  // 섹션이 변경될 때 인트로 상태 초기화
+  useEffect(() => {
+    if (activeSection === 'works') {
+      setHasPlayedIntro(false);
+      const timer = setTimeout(() => {
+        setHasPlayedIntro(true);
+      }, introTotalMs);
+      return () => clearTimeout(timer);
+    } else {
+      // 다른 섹션으로 갈 때는 즉시 인트로 완료 상태로
+      setHasPlayedIntro(true);
+    }
+  }, [activeSection, introTotalMs]);
 
   return (
     <div className="min-h-screen bg-white">
-      <Header onSectionChange={setActiveSection} />
+      <Header
+        onSectionChange={setActiveSection}
+        isIntro={!hasPlayedIntro}
+        introDelayMs={introHeaderDelayMs}
+      />
       {activeSection === 'works' && (
         <>
           <PortfolioLayout 
             projects={projects} 
             onProjectChange={setActiveProject}
+            onWheelingChange={setIsWheeling}
+            isIntro={!hasPlayedIntro}
+            introContentDelayMs={introContentDelayMs}
+            introMaskDelayMs={introMaskDelayMs}
+            introSidebarDelayMs={introSidebarDelayMs}
           />
-          <GeneralInfoPanel activeProject={activeProject} />
+          <GeneralInfoPanel
+            activeProject={activeProject}
+            isIntro={!hasPlayedIntro}
+            introDelayMs={introInfoDelayMs}
+            isWheeling={isWheeling}
+          />
         </>
       )}
       {activeSection === 'about' && <AboutPage />}

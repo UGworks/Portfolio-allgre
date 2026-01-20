@@ -1,17 +1,42 @@
+import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { info } from '../data';
 import { Project } from '../types';
 
 interface GeneralInfoPanelProps {
   activeProject: Project | null;
+  isIntro?: boolean;
+  introDelayMs?: number;
+  isWheeling?: boolean;
 }
 
-const GeneralInfoPanel = ({ activeProject }: GeneralInfoPanelProps) => {
+const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, isWheeling = false }: GeneralInfoPanelProps) => {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // 패널에서 휠 이벤트를 막아서 전체 페이지 휠 이벤트만 작동하도록
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    const handlePanelWheel = (e: WheelEvent) => {
+      // 패널의 기본 스크롤 방지 - 전체 페이지 휠 이벤트가 처리하도록
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    panel.addEventListener('wheel', handlePanelWheel, { passive: false, capture: true });
+
+    return () => {
+      panel.removeEventListener('wheel', handlePanelWheel, { capture: true } as EventListenerOptions);
+    };
+  }, []);
+
   return (
     <motion.div
+      ref={panelRef}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      animate={{ opacity: isWheeling ? 0.3 : 1, y: 0 }}
+      transition={{ duration: 0.3, delay: isIntro ? introDelayMs / 1000 : 0 }}
       className="fixed top-16 right-0 w-96 p-8 bg-white z-30 border-l border-gray-200 overflow-y-auto"
       style={{ height: 'calc(50vh - 2rem)', maxHeight: 'calc(50vh - 2rem)' }}
     >

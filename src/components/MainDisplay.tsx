@@ -5,22 +5,31 @@ import { Project } from '../types';
 interface MainDisplayProps {
   project: Project | null;
   isVisible: boolean;
+  isIntro?: boolean;
+  introDelayMs?: number;
+  isWheeling?: boolean;
 }
 
-const MainDisplay = ({ project, isVisible }: MainDisplayProps) => {
+const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, isWheeling = false }: MainDisplayProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     if (videoRef.current && project?.video && isVisible) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {
-        // 재생 실패 시 무시
-      });
+      // 인트로가 끝나고 휠이 멈췄을 때만 재생
+      if (!isIntro && !isWheeling) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {
+          // 재생 실패 시 무시
+        });
+      } else {
+        // 인트로 중이거나 휠 중일 때는 일시정지
+        videoRef.current.pause();
+      }
     } else if (videoRef.current && !isVisible) {
       videoRef.current.pause();
     }
-  }, [project, isVisible]);
+  }, [project, isVisible, isWheeling, isIntro]);
 
   // 이미지가 변경될 때 로드 상태 리셋
   useEffect(() => {
@@ -46,8 +55,9 @@ const MainDisplay = ({ project, isVisible }: MainDisplayProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ 
-            duration: project.video ? 0.4 : 0.2, 
-            ease: 'easeInOut' 
+            duration: isWheeling ? 0.1 : (project.video ? 0.4 : 0.2), 
+            ease: 'easeInOut',
+            delay: isIntro ? introDelayMs / 1000 : 0
           }}
           className="absolute inset-0 bg-black flex items-center justify-center p-8"
           style={{ overflow: 'hidden' }}
@@ -65,7 +75,6 @@ const MainDisplay = ({ project, isVisible }: MainDisplayProps) => {
                 loop
                 muted
                 playsInline
-                autoPlay
               />
             ) : (
               <img

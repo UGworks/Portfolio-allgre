@@ -7,9 +7,19 @@ interface ProjectSidebarProps {
   activeIndex: number;
   onProjectClick: (index: number) => void;
   scrollProgress?: number;
+  isIntro?: boolean;
+  introDelayMs?: number;
 }
 
-const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress = 0 }: ProjectSidebarProps) => {
+const ProjectSidebar = ({
+  projects,
+  activeIndex,
+  onProjectClick,
+  scrollProgress = 0,
+  isIntro = false,
+  introDelayMs = 0,
+}: ProjectSidebarProps) => {
+  const loopCount = 3;
   const sidebarRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prevActiveIndexRef = useRef(activeIndex);
@@ -87,30 +97,21 @@ const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress 
     calculateMagnetEffect();
   }, [scrollProgress, activeIndex, projects.length]);
 
-  // activeIndex가 변경될 때 해당 썸네일이 보이도록 스크롤
+  // activeIndex가 변경될 때 해당 썸네일이 항상 중앙에 위치하도록 스크롤
   useEffect(() => {
     const activeItem = itemRefs.current[activeIndex];
     const sidebar = sidebarRef.current;
-    const prevIndex = prevActiveIndexRef.current;
     
-    if (activeItem && sidebar) {
+    if (activeItem && sidebar && !isIntro) {
       const itemTop = activeItem.offsetTop;
       const itemHeight = activeItem.offsetHeight;
-      const sidebarTop = sidebar.scrollTop;
       const sidebarHeight = sidebar.clientHeight;
-      const targetScroll = itemTop - sidebar.clientHeight / 2 + itemHeight / 2;
       
-      // 점프 거리 계산 (이전 인덱스와의 차이)
-      const jumpDistance = Math.abs(activeIndex - prevIndex);
+      // 썸네일이 정확히 중앙에 오도록 계산
+      const targetScroll = itemTop - (sidebarHeight / 2) + (itemHeight / 2);
       
-      // 썸네일이 보이지 않거나 점프가 큰 경우 커스텀 스크롤 사용
-      const needsScroll = itemTop < sidebarTop || itemTop + itemHeight > sidebarTop + sidebarHeight;
-      
-      if (needsScroll || jumpDistance > 1) {
-        // 점프 거리에 따라 애니메이션 시간 조정 (더 빠르게, ease-in-out)
-        const scrollDuration = Math.min(300 + jumpDistance * 50, 600);
-        smoothScrollTo(targetScroll, scrollDuration);
-      }
+      // 항상 중앙에 위치시키기 위해 스크롤
+      smoothScrollTo(targetScroll, 400);
       
       prevActiveIndexRef.current = activeIndex;
     }
@@ -120,28 +121,92 @@ const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress 
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [activeIndex]);
+  }, [activeIndex, isIntro]);
+
+  // 무한 루핑 스크롤 설정 (중앙에서 시작하고 끝에 도달하면 점프)
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar || projects.length === 0) return;
+
+    const setInitialPosition = () => {
+      const listHeight = sidebar.scrollHeight / loopCount;
+      if (listHeight > 0) {
+        sidebar.scrollTop = listHeight;
+      }
+    };
+
+    const handleLoopScroll = () => {
+      const listHeight = sidebar.scrollHeight / loopCount;
+      if (listHeight <= 0) return;
+
+      if (sidebar.scrollTop <= listHeight * 0.25) {
+        sidebar.scrollTop += listHeight;
+      } else if (sidebar.scrollTop >= listHeight * 1.75) {
+        sidebar.scrollTop -= listHeight;
+      }
+    };
+
+    const rafId = requestAnimationFrame(setInitialPosition);
+    sidebar.addEventListener('scroll', handleLoopScroll, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      sidebar.removeEventListener('scroll', handleLoopScroll);
+    };
+  }, [projects.length]);
+
+  const loopedProjects = Array.from({ length: loopCount }, (_, loopIndex) =>
+    projects.map((project, index) => ({ project, index, loopIndex }))
+  ).flat();
+
+  // 사이드바에서 휠 이벤트를 막아서 전체 페이지 휠 이벤트만 작동하도록
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+
+    const handleSidebarWheel = (e: WheelEvent) => {
+      // 사이드바의 기본 스크롤 방지 - 전체 페이지 휠 이벤트가 처리하도록
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    sidebar.addEventListener('wheel', handleSidebarWheel, { passive: false, capture: true });
+
+    return () => {
+      sidebar.removeEventListener('wheel', handleSidebarWheel, { capture: true } as EventListenerOptions);
+    };
+  }, []);
 
   return (
-    <div 
+    <motion.div 
       ref={sidebarRef}
+      initial={isIntro ? { x: '-100%' } : false}
+      animate={{ x: 0 }}
+      transition={{ duration: 0.6, ease: 'easeInOut', delay: isIntro ? introDelayMs / 1000 : 0 }}
       className="fixed left-0 top-16 bottom-0 w-80 overflow-y-auto bg-white z-30 border-r border-gray-200"
       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
       <div className="p-6 space-y-20">
-        {projects.map((project, index) => (
+        {loopedProjects.map(({ project, index, loopIndex }) => {
+          const isActive = index === activeIndex && !isIntro;
+          const shouldAssignRef = loopIndex === 1;
+          return (
           <motion.div
-            key={project.id}
-            ref={(el) => { itemRefs.current[index] = el; }}
+            key={`${project.id}-${loopIndex}-${index}`}
+            ref={(el) => {
+              if (shouldAssignRef) {
+                itemRefs.current[index] = el;
+              }
+            }}
             onClick={() => onProjectClick(index)}
             className={`cursor-pointer group flex items-start gap-3 ${
-              index === activeIndex ? 'opacity-100' : 'opacity-60 hover:opacity-80'
+              isActive ? 'opacity-100' : 'opacity-60 hover:opacity-80'
             } transition-opacity`}
             whileHover={{ x: 4 }}
             animate={{
-              y: index === activeIndex ? -8 + magnetOffset : 0,
-              scale: index === activeIndex ? 0.95 : 1,
-              x: index === activeIndex ? magnetOffset * 0.3 : 0,
+              y: isActive ? -8 + magnetOffset : 0,
+              scale: isActive ? 0.95 : 1,
+              x: isActive ? magnetOffset * 0.3 : 0,
             }}
             transition={{
               type: "spring",
@@ -155,7 +220,7 @@ const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress 
               className="relative overflow-hidden bg-gray-100 flex-shrink-0"
               style={{ width: '60px', height: '60px' }}
               animate={{
-                scale: index === activeIndex ? 0.92 : 1,
+                scale: isActive ? 0.92 : 1,
               }}
               transition={{
                 duration: 0.4,
@@ -187,7 +252,7 @@ const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress 
                 />
               )}
               {/* 선택된 썸네일 마스킹 효과 */}
-              {index === activeIndex && (
+              {isActive && (
                 <motion.div
                   className="absolute inset-0 border-2 border-black"
                   initial={{ opacity: 0 }}
@@ -198,7 +263,7 @@ const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress 
             </motion.div>
             {/* 프로젝트 정보 텍스트 - 선택된 썸네일에만 표시 (페이드 효과) */}
             <AnimatePresence mode="wait">
-              {index === activeIndex && (
+              {isActive && (
                 <motion.div
                   key={`info-${activeIndex}`}
                   initial={{ opacity: 0, x: -10 }}
@@ -216,9 +281,10 @@ const ProjectSidebar = ({ projects, activeIndex, onProjectClick, scrollProgress 
               )}
             </AnimatePresence>
           </motion.div>
-        ))}
+        );
+        })}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
