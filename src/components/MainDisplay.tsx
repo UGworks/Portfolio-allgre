@@ -128,7 +128,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
   }
 
   return (
-    <div className="absolute inset-0 bg-black flex items-center justify-center p-8" style={{ overflow: 'hidden' }}>
+    <div className="absolute inset-0 bg-black flex items-center justify-center p-4 md:p-8" style={{ overflow: 'hidden' }}>
       {isVisible && (
         <motion.div 
           key={project.id}

@@ -70,29 +70,45 @@ const ProjectSidebar = ({
     const sidebar = sidebarRef.current;
     
     if (activeItem && sidebar && !isIntro) {
-      const listHeight = sidebar.scrollHeight / loopCount;
-      const itemHeight = activeItem.offsetHeight;
-      const sidebarHeight = sidebar.clientHeight;
-      const currentScrollTop = sidebar.scrollTop;
+      // 모바일: 가로 스크롤, PC: 세로 스크롤
+      const isMobile = window.innerWidth < 768;
       
-      // 중앙 루프에서의 타겟 스크롤 위치
-      const targetInCenterLoop = activeItem.offsetTop - (sidebarHeight / 2) + (itemHeight / 2);
-      
-      // 현재 위치에서 가장 가까운 루프의 타겟 위치 계산
-      let targetScroll = targetInCenterLoop;
-      const distanceToCenter = Math.abs(currentScrollTop - targetInCenterLoop);
-      const distanceToUpper = Math.abs(currentScrollTop - (targetInCenterLoop - listHeight));
-      const distanceToLower = Math.abs(currentScrollTop - (targetInCenterLoop + listHeight));
-      
-      // 가장 가까운 루프 선택
-      if (distanceToUpper < distanceToCenter && distanceToUpper < distanceToLower) {
-        targetScroll = targetInCenterLoop - listHeight;
-      } else if (distanceToLower < distanceToCenter && distanceToLower < distanceToUpper) {
-        targetScroll = targetInCenterLoop + listHeight;
+      if (isMobile) {
+        // 모바일: 가로 스크롤 중앙 정렬
+        const itemWidth = activeItem.offsetWidth;
+        const sidebarWidth = sidebar.clientWidth;
+        const targetScrollLeft = activeItem.offsetLeft - (sidebarWidth / 2) + (itemWidth / 2);
+        
+        sidebar.scrollTo({
+          left: targetScrollLeft,
+          behavior: 'smooth'
+        });
+      } else {
+        // PC: 세로 스크롤 중앙 정렬
+        const listHeight = sidebar.scrollHeight / loopCount;
+        const itemHeight = activeItem.offsetHeight;
+        const sidebarHeight = sidebar.clientHeight;
+        const currentScrollTop = sidebar.scrollTop;
+        
+        // 중앙 루프에서의 타겟 스크롤 위치
+        const targetInCenterLoop = activeItem.offsetTop - (sidebarHeight / 2) + (itemHeight / 2);
+        
+        // 현재 위치에서 가장 가까운 루프의 타겟 위치 계산
+        let targetScroll = targetInCenterLoop;
+        const distanceToCenter = Math.abs(currentScrollTop - targetInCenterLoop);
+        const distanceToUpper = Math.abs(currentScrollTop - (targetInCenterLoop - listHeight));
+        const distanceToLower = Math.abs(currentScrollTop - (targetInCenterLoop + listHeight));
+        
+        // 가장 가까운 루프 선택
+        if (distanceToUpper < distanceToCenter && distanceToUpper < distanceToLower) {
+          targetScroll = targetInCenterLoop - listHeight;
+        } else if (distanceToLower < distanceToCenter && distanceToLower < distanceToUpper) {
+          targetScroll = targetInCenterLoop + listHeight;
+        }
+        
+        // 가장 가까운 경로로 스크롤
+        smoothScrollTo(targetScroll, 400);
       }
-      
-      // 가장 가까운 경로로 스크롤
-      smoothScrollTo(targetScroll, 400);
       
       prevActiveIndexRef.current = activeIndex;
     }
@@ -104,10 +120,13 @@ const ProjectSidebar = ({
     };
   }, [activeIndex, isIntro, projects.length]);
 
-  // 무한 루핑 스크롤 설정 (중앙에서 시작하고 끝에 도달하면 점프)
+  // 무한 루핑 스크롤 설정 (중앙에서 시작하고 끝에 도달하면 점프) - PC만 적용
   useEffect(() => {
     const sidebar = sidebarRef.current;
     if (!sidebar || projects.length === 0) return;
+
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return; // 모바일에서는 무한 루핑 불필요
 
     const setInitialPosition = () => {
       const listHeight = sidebar.scrollHeight / loopCount;
@@ -161,13 +180,15 @@ const ProjectSidebar = ({
   return (
     <motion.div 
       ref={sidebarRef}
-      initial={isIntro ? { x: '-100%' } : false}
-      animate={{ x: 0 }}
+      initial={isIntro ? { x: '-100%', y: 0 } : false}
+      animate={{ x: 0, y: 0 }}
       transition={{ duration: 0.6, ease: 'easeInOut', delay: isIntro ? introDelayMs / 1000 : 0 }}
-      className="fixed left-0 top-16 bottom-0 w-80 overflow-y-auto bg-white z-30 border-r border-gray-200"
+      className="fixed left-0 top-16 bg-white z-30 border-r border-gray-200
+                 md:bottom-0 md:w-80 md:overflow-y-auto
+                 bottom-auto w-full h-20 overflow-x-auto overflow-y-hidden border-r-0 border-b"
       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
-      <div className="p-6 space-y-20">
+      <div className="md:p-6 md:space-y-20 p-4 flex md:flex-col flex-row gap-4 h-full items-center">
         {loopedProjects.map(({ project, index, loopIndex }) => {
           const isActive = index === activeIndex && !isIntro;
           const shouldAssignRef = loopIndex === 1;
@@ -180,7 +201,7 @@ const ProjectSidebar = ({
               }
             }}
             onClick={() => onProjectClick(index)}
-            className="cursor-pointer group flex items-start gap-3"
+            className="cursor-pointer group flex md:items-start items-center md:flex-row flex-col md:gap-3 gap-2 flex-shrink-0"
             whileHover={{ x: 4 }}
           >
             {/* 정방형 썸네일 */}
@@ -230,7 +251,7 @@ const ProjectSidebar = ({
                 />
               )}
             </motion.div>
-            {/* 프로젝트 정보 텍스트 - 선택된 썸네일에만 표시 (페이드 효과) */}
+            {/* 프로젝트 정보 텍스트 - 선택된 썸네일에만 표시 (페이드 효과), 모바일에서는 숨김 */}
             <AnimatePresence mode="wait">
               {isActive && (
                 <motion.div
@@ -242,7 +263,7 @@ const ProjectSidebar = ({
                     duration: 0.3, 
                     ease: 'easeInOut' 
                   }}
-                  className="flex-1 min-w-0 pt-1"
+                  className="flex-1 min-w-0 pt-1 hidden md:block"
                 >
                   <h3 className="text-xs font-normal mb-0.5 leading-tight">{project.title}</h3>
                   <p className="text-[10px] text-gray-500 font-light leading-tight">{project.category}</p>

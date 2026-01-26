@@ -37,8 +37,10 @@ const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, is
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: isWheeling ? 0.3 : 1, y: 0 }}
       transition={{ duration: 0.3, delay: isIntro ? introDelayMs / 1000 : 0 }}
-      className="fixed top-16 right-0 w-96 p-8 bg-white z-30 border-l border-gray-200 overflow-y-auto"
-      style={{ height: 'calc(100vh - 4rem)', maxHeight: 'calc(100vh - 4rem)' }}
+      className="fixed md:top-16 md:right-0 md:w-96 md:border-l md:border-gray-200
+                 top-auto bottom-0 left-0 right-0 w-full border-t border-gray-200
+                 p-4 md:p-8 bg-white z-30 overflow-y-auto
+                 h-[50vh] md:h-[calc(100vh-4rem)]"
     >
       <AnimatePresence mode="wait">
         {activeProject ? (

@@ -254,7 +254,7 @@ const PortfolioLayout = ({
 
   return (
     <div className="min-h-screen bg-white" ref={containerRef}>
-      {/* 왼쪽 사이드바 */}
+      {/* 모바일: 상단 썸네일 바, PC: 왼쪽 사이드바 */}
       <ProjectSidebar
         projects={projects}
         activeIndex={activeIndex}
@@ -263,12 +263,12 @@ const PortfolioLayout = ({
         introDelayMs={introSidebarDelayMs}
       />
 
-      {/* 오른쪽 메인 영역 */}
-      <div className="ml-80 min-h-screen relative">
-        {/* 오른쪽 하단 메인 디스플레이 영역 (검은색 배경) */}
+      {/* 모바일: 메인 컨텐츠 영역, PC: 오른쪽 메인 영역 */}
+      <div className="md:ml-80 min-h-screen relative">
+        {/* 모바일: 전체 화면 메인 디스플레이, PC: 오른쪽 하단 메인 디스플레이 영역 (검은색 배경) */}
         <motion.div
           ref={mainDisplayRef}
-          className="fixed bottom-0 bg-black z-20"
+          className="fixed bottom-0 bg-black z-20 md:left-80 md:right-96 left-0 right-0 md:h-[calc(100vh-4rem)]"
           initial={isIntro ? { clipPath: 'inset(100% 0 0 0)', opacity: 0 } : false}
           animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1 }}
           transition={
@@ -282,10 +282,8 @@ const PortfolioLayout = ({
               : { duration: 0 }
           }
           style={{ 
-            left: '20rem', // 사이드바 너비 (80 = 20rem)
-            right: '24rem', // General Info Panel 너비 (96 = 24rem)
-            height: 'calc(100vh - 4rem)',
-            top: '4rem',
+            height: 'calc(100vh - 4rem - 20px - 50vh)', // 모바일: 헤더(4rem) + 썸네일바(20px) + 하단 패널(50vh)
+            top: 'calc(4rem + 20px)', // 모바일: 헤더 아래 썸네일바
             overflow: 'hidden',
             clipPath: 'inset(0 0 0 0)'
           }}
