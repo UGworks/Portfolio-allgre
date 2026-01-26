@@ -4,6 +4,7 @@ export interface Project {
   category: string;
   image?: string;
   video?: string;
+  thumbnail?: string; // 썸네일용 이미지 (비디오 프로젝트용)
   link?: string;
   description?: string;
 }

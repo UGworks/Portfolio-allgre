@@ -38,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
         <div className="flex items-center justify-between">
           <motion.a
             href="#"
-            className="text-lg font-normal tracking-widest"
+            className="text-base font-normal tracking-widest"
             whileHover={{ opacity: 0.7 }}
             style={{ letterSpacing: '0.3em' }}
           >
@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
           <div className="hidden md:flex items-center gap-8">
             <a 
               href="#works" 
-              className="text-sm hover:opacity-70 transition-opacity cursor-pointer"
+              className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 onSectionChange?.('works');
@@ -58,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             </a>
             <a 
               href="#about" 
-              className="text-sm hover:opacity-70 transition-opacity cursor-pointer"
+              className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 onSectionChange?.('about');
@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             </a>
             <a 
               href="#contact" 
-              className="text-sm hover:opacity-70 transition-opacity cursor-pointer"
+              className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 onSectionChange?.('contact');
@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             </a>
           </div>
 
-          <div className="text-sm font-normal">
+          <div className="text-xs font-normal">
             {currentTime}
           </div>
 
@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
           >
             <a 
               href="#works" 
-              className="block text-sm hover:opacity-70 transition-opacity cursor-pointer" 
+              className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
               onClick={(e) => {
                 e.preventDefault();
                 setIsMenuOpen(false);
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             </a>
             <a 
               href="#about" 
-              className="block text-sm hover:opacity-70 transition-opacity cursor-pointer" 
+              className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
               onClick={(e) => {
                 e.preventDefault();
                 setIsMenuOpen(false);
@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             </a>
             <a 
               href="#contact" 
-              className="block text-sm hover:opacity-70 transition-opacity cursor-pointer" 
+              className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
               onClick={(e) => {
                 e.preventDefault();
                 setIsMenuOpen(false);

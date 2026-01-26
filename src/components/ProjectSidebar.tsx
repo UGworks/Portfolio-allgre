@@ -97,20 +97,34 @@ const ProjectSidebar = ({
     calculateMagnetEffect();
   }, [scrollProgress, activeIndex, projects.length]);
 
-  // activeIndex가 변경될 때 해당 썸네일이 항상 중앙에 위치하도록 스크롤
+  // activeIndex가 변경될 때 해당 썸네일이 항상 중앙에 위치하도록 스크롤 (가장 가까운 루프로)
   useEffect(() => {
     const activeItem = itemRefs.current[activeIndex];
     const sidebar = sidebarRef.current;
     
     if (activeItem && sidebar && !isIntro) {
-      const itemTop = activeItem.offsetTop;
+      const listHeight = sidebar.scrollHeight / loopCount;
       const itemHeight = activeItem.offsetHeight;
       const sidebarHeight = sidebar.clientHeight;
+      const currentScrollTop = sidebar.scrollTop;
       
-      // 썸네일이 정확히 중앙에 오도록 계산
-      const targetScroll = itemTop - (sidebarHeight / 2) + (itemHeight / 2);
+      // 중앙 루프에서의 타겟 스크롤 위치
+      const targetInCenterLoop = activeItem.offsetTop - (sidebarHeight / 2) + (itemHeight / 2);
       
-      // 항상 중앙에 위치시키기 위해 스크롤
+      // 현재 위치에서 가장 가까운 루프의 타겟 위치 계산
+      let targetScroll = targetInCenterLoop;
+      const distanceToCenter = Math.abs(currentScrollTop - targetInCenterLoop);
+      const distanceToUpper = Math.abs(currentScrollTop - (targetInCenterLoop - listHeight));
+      const distanceToLower = Math.abs(currentScrollTop - (targetInCenterLoop + listHeight));
+      
+      // 가장 가까운 루프 선택
+      if (distanceToUpper < distanceToCenter && distanceToUpper < distanceToLower) {
+        targetScroll = targetInCenterLoop - listHeight;
+      } else if (distanceToLower < distanceToCenter && distanceToLower < distanceToUpper) {
+        targetScroll = targetInCenterLoop + listHeight;
+      }
+      
+      // 가장 가까운 경로로 스크롤
       smoothScrollTo(targetScroll, 400);
       
       prevActiveIndexRef.current = activeIndex;
@@ -121,7 +135,7 @@ const ProjectSidebar = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [activeIndex, isIntro]);
+  }, [activeIndex, isIntro, projects.length]);
 
   // 무한 루핑 스크롤 설정 (중앙에서 시작하고 끝에 도달하면 점프)
   useEffect(() => {
@@ -199,35 +213,32 @@ const ProjectSidebar = ({
               }
             }}
             onClick={() => onProjectClick(index)}
-            className={`cursor-pointer group flex items-start gap-3 ${
-              isActive ? 'opacity-100' : 'opacity-60 hover:opacity-80'
-            } transition-opacity`}
+            className="cursor-pointer group flex items-start gap-3"
             whileHover={{ x: 4 }}
-            animate={{
-              y: isActive ? -8 + magnetOffset : 0,
-              scale: isActive ? 0.95 : 1,
-              x: isActive ? magnetOffset * 0.3 : 0,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-              mass: 0.8
-            }}
           >
             {/* 정방형 썸네일 */}
             <motion.div 
               className="relative overflow-hidden bg-gray-100 flex-shrink-0"
-              style={{ width: '60px', height: '60px' }}
+              style={{ 
+                width: '60px', 
+                height: '60px',
+                boxShadow: isActive ? 'inset 0 0 20px rgba(0, 0, 0, 0.3)' : 'none'
+              }}
               animate={{
-                scale: isActive ? 0.92 : 1,
+                clipPath: isActive ? 'inset(8% 8% 8% 8%)' : 'inset(0% 0% 0% 0%)',
               }}
               transition={{
                 duration: 0.4,
                 ease: 'easeInOut'
               }}
             >
-              {project.video ? (
+              {project.thumbnail ? (
+                <img
+                  src={project.thumbnail}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : project.video ? (
                 <video
                   src={project.video}
                   className="w-full h-full object-cover"
@@ -251,15 +262,6 @@ const ProjectSidebar = ({
                   className="w-full h-full object-cover"
                 />
               )}
-              {/* 선택된 썸네일 마스킹 효과 */}
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 border-2 border-black"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.3 }}
-                  transition={{ duration: 0.4, ease: 'easeInOut' }}
-                />
-              )}
             </motion.div>
             {/* 프로젝트 정보 텍스트 - 선택된 썸네일에만 표시 (페이드 효과) */}
             <AnimatePresence mode="wait">
@@ -275,8 +277,8 @@ const ProjectSidebar = ({
                   }}
                   className="flex-1 min-w-0 pt-1"
                 >
-                  <h3 className="text-sm font-normal mb-0.5 leading-tight">{project.title}</h3>
-                  <p className="text-xs text-gray-500 font-light leading-tight">{project.category}</p>
+                  <h3 className="text-xs font-normal mb-0.5 leading-tight">{project.title}</h3>
+                  <p className="text-[10px] text-gray-500 font-light leading-tight">{project.category}</p>
                 </motion.div>
               )}
             </AnimatePresence>

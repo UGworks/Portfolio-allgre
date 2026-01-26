@@ -130,13 +130,13 @@ const PortfolioLayout = ({
         wheelStopTimeoutRef.current = null;
       }, 150);
       
-      // 기존 이미지 자동 전환 타이머 취소
-      if (imageAutoTransitionRef.current) {
-        clearTimeout(imageAutoTransitionRef.current);
-        imageAutoTransitionRef.current = null;
-        isAutoTransitioningRef.current = false;
-      }
-      
+        // 기존 이미지 자동 전환 타이머 취소
+        if (imageAutoTransitionRef.current) {
+          clearTimeout(imageAutoTransitionRef.current);
+          imageAutoTransitionRef.current = null;
+          isAutoTransitioningRef.current = false;
+        }
+        
       // 휠 민감도
       const threshold = 5;
       
@@ -161,16 +161,16 @@ const PortfolioLayout = ({
         // 즉시 전환
         activeIndexRef.current = newIndex;
         setActiveIndex(newIndex);
-        if (onProjectChangeRef.current) {
+            if (onProjectChangeRef.current) {
           onProjectChangeRef.current(projects[newIndex]);
-        }
+            }
         
         // 스크롤 위치 동기화 (순환 고려)
         const scrollTo = (newIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
         window.scrollTo({ top: scrollTo, behavior: 'auto' });
-      }
+          }
     };
-
+        
     // 스크롤 진행도만 업데이트 (인덱스 변경은 휠 이벤트에서만)
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -208,6 +208,13 @@ const PortfolioLayout = ({
       isAutoTransitioningRef.current = false;
     }
     
+    // 휠 상태 해제 (썸네일 클릭 시 비디오가 재생되도록)
+    setIsWheeling(false);
+    if (wheelStopTimeoutRef.current) {
+      clearTimeout(wheelStopTimeoutRef.current);
+      wheelStopTimeoutRef.current = null;
+    }
+    
     // 즉시 전환
     activeIndexRef.current = index;
     setActiveIndex(index);
@@ -218,6 +225,22 @@ const PortfolioLayout = ({
     // 해당 프로젝트로 스크롤
     const scrollTo = (index / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
     window.scrollTo({ top: scrollTo, behavior: 'auto' });
+  };
+
+  const handleVideoEnd = () => {
+    // 비디오가 끝나면 다음 프로젝트로 전환 (순환)
+    if (projects.length > 0 && !isWheeling) {
+      const nextIndex = (activeIndexRef.current + 1) % projects.length;
+      activeIndexRef.current = nextIndex;
+      setActiveIndex(nextIndex);
+      if (onProjectChangeRef.current) {
+        onProjectChangeRef.current(projects[nextIndex]);
+      }
+      
+      // 스크롤 위치 업데이트
+      const scrollTo = (nextIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo({ top: scrollTo, behavior: 'auto' });
+    }
   };
 
   // 초기 프로젝트 설정 및 인덱스 초기화
@@ -242,7 +265,7 @@ const PortfolioLayout = ({
       
       // 프로젝트 변경 콜백
       if (onProjectChange) {
-        onProjectChange(projects[0]);
+      onProjectChange(projects[0]);
       }
       
       // 스크롤 위치 초기화
@@ -269,11 +292,16 @@ const PortfolioLayout = ({
         <motion.div
           ref={mainDisplayRef}
           className="fixed bottom-0 bg-black z-20"
-          initial={isIntro ? { clipPath: 'inset(100% 0 0 0)' } : false}
-          animate={{ clipPath: 'inset(0 0 0 0)' }}
+          initial={isIntro ? { clipPath: 'inset(100% 0 0 0)', opacity: 0 } : false}
+          animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1 }}
           transition={
             isIntro
-              ? { duration: 2, ease: 'easeInOut', delay: introMaskDelayMs / 1000 }
+              ? { 
+                  duration: 2, 
+                  ease: 'easeInOut', 
+                  delay: introMaskDelayMs / 1000,
+                  opacity: { duration: 1.5, ease: 'easeOut' }
+                }
               : { duration: 0 }
           }
           style={{ 
@@ -290,8 +318,9 @@ const PortfolioLayout = ({
               project={projects[activeIndex]}
               isVisible={true}
               isIntro={isIntro}
-              introDelayMs={introContentDelayMs}
+              introDelayMs={introMaskDelayMs}
               isWheeling={isWheeling}
+              onVideoEnd={handleVideoEnd}
             />
           )}
         </motion.div>
