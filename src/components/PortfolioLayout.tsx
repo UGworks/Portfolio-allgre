@@ -22,7 +22,6 @@ const PortfolioLayout = ({
   introSidebarDelayMs = 0,
 }: PortfolioLayoutProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isWheeling, setIsWheeling] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mainDisplayRef = useRef<HTMLDivElement>(null);
@@ -169,29 +168,11 @@ const PortfolioLayout = ({
       }
     };
 
-    // 스크롤 진행도만 업데이트 (인덱스 변경은 휠 이벤트에서만)
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollableHeight = documentHeight - windowHeight;
-
-      if (scrollableHeight > 0) {
-        const progress = Math.min(scrollTop / scrollableHeight, 1);
-        setScrollProgress(progress);
-      }
-    };
-
     // 휠 이벤트 리스너
     document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // 초기 실행
 
     return () => {
       document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
-      window.removeEventListener('scroll', handleScroll);
       if (wheelStopTimeoutRef.current) {
         clearTimeout(wheelStopTimeoutRef.current);
       }
@@ -247,7 +228,6 @@ const PortfolioLayout = ({
       // 상태 초기화
       activeIndexRef.current = 0;
       setActiveIndex(0);
-      setScrollProgress(0);
       isAutoTransitioningRef.current = false;
       setIsWheeling(false);
       
