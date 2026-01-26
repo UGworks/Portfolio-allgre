@@ -9,7 +9,6 @@ interface PortfolioLayoutProps {
   onProjectChange?: (project: Project | null) => void;
   onWheelingChange?: (isWheeling: boolean) => void;
   isIntro?: boolean;
-  introContentDelayMs?: number;
   introMaskDelayMs?: number;
   introSidebarDelayMs?: number;
 }
@@ -19,7 +18,6 @@ const PortfolioLayout = ({
   onProjectChange,
   onWheelingChange,
   isIntro = false,
-  introContentDelayMs = 0,
   introMaskDelayMs = 0,
   introSidebarDelayMs = 0,
 }: PortfolioLayoutProps) => {
@@ -130,13 +128,13 @@ const PortfolioLayout = ({
         wheelStopTimeoutRef.current = null;
       }, 150);
       
-        // 기존 이미지 자동 전환 타이머 취소
-        if (imageAutoTransitionRef.current) {
-          clearTimeout(imageAutoTransitionRef.current);
-          imageAutoTransitionRef.current = null;
-          isAutoTransitioningRef.current = false;
-        }
-        
+      // 기존 이미지 자동 전환 타이머 취소
+      if (imageAutoTransitionRef.current) {
+        clearTimeout(imageAutoTransitionRef.current);
+        imageAutoTransitionRef.current = null;
+        isAutoTransitioningRef.current = false;
+      }
+      
       // 휠 민감도
       const threshold = 5;
       
@@ -161,16 +159,16 @@ const PortfolioLayout = ({
         // 즉시 전환
         activeIndexRef.current = newIndex;
         setActiveIndex(newIndex);
-            if (onProjectChangeRef.current) {
+        if (onProjectChangeRef.current) {
           onProjectChangeRef.current(projects[newIndex]);
-            }
+        }
         
         // 스크롤 위치 동기화 (순환 고려)
         const scrollTo = (newIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
         window.scrollTo({ top: scrollTo, behavior: 'auto' });
-          }
+      }
     };
-        
+
     // 스크롤 진행도만 업데이트 (인덱스 변경은 휠 이벤트에서만)
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -265,7 +263,7 @@ const PortfolioLayout = ({
       
       // 프로젝트 변경 콜백
       if (onProjectChange) {
-      onProjectChange(projects[0]);
+        onProjectChange(projects[0]);
       }
       
       // 스크롤 위치 초기화
@@ -281,7 +279,6 @@ const PortfolioLayout = ({
         projects={projects}
         activeIndex={activeIndex}
         onProjectClick={handleProjectClick}
-        scrollProgress={scrollProgress}
         isIntro={isIntro}
         introDelayMs={introSidebarDelayMs}
       />

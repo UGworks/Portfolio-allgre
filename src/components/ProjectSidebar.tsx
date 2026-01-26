@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project } from '../types';
 
@@ -6,7 +6,6 @@ interface ProjectSidebarProps {
   projects: Project[];
   activeIndex: number;
   onProjectClick: (index: number) => void;
-  scrollProgress?: number;
   isIntro?: boolean;
   introDelayMs?: number;
 }
@@ -15,7 +14,6 @@ const ProjectSidebar = ({
   projects,
   activeIndex,
   onProjectClick,
-  scrollProgress = 0,
   isIntro = false,
   introDelayMs = 0,
 }: ProjectSidebarProps) => {
@@ -24,7 +22,6 @@ const ProjectSidebar = ({
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prevActiveIndexRef = useRef(activeIndex);
   const animationFrameRef = useRef<number | null>(null);
-  const [magnetOffset, setMagnetOffset] = useState(0);
 
   // 커스텀 easing 함수 (ease-in-out)
   const easeInOut = (t: number): number => {
@@ -66,36 +63,6 @@ const ProjectSidebar = ({
     animationFrameRef.current = requestAnimationFrame(animate);
   };
 
-  // 마그넷 효과 계산 (스크롤 진행도에 따라)
-  useEffect(() => {
-    const calculateMagnetEffect = () => {
-      if (projects.length === 0) return;
-      
-      const sectionSize = 1 / projects.length;
-      const targetSection = activeIndex;
-      const currentSectionProgress = scrollProgress / sectionSize;
-      const distanceFromTarget = Math.abs(currentSectionProgress - targetSection);
-      
-      // 타겟 섹션에 가까울수록 강한 마그넷 효과
-      // 거리가 멀수록 효과 감소 (최대 거리: 2 섹션)
-      const maxDistance = 2;
-      const magnetStrength = Math.max(0, 1 - distanceFromTarget / maxDistance);
-      
-      // 스크롤 방향에 따라 마그넷 효과 방향 결정
-      let offset = 0;
-      if (currentSectionProgress < targetSection) {
-        // 아래로 스크롤 중 - 위로 끌림 (음수)
-        offset = -12 * magnetStrength;
-      } else if (currentSectionProgress > targetSection) {
-        // 위로 스크롤 중 - 아래로 끌림 (양수)
-        offset = 12 * magnetStrength;
-      }
-      
-      setMagnetOffset(offset);
-    };
-    
-    calculateMagnetEffect();
-  }, [scrollProgress, activeIndex, projects.length]);
 
   // activeIndex가 변경될 때 해당 썸네일이 항상 중앙에 위치하도록 스크롤 (가장 가까운 루프로)
   useEffect(() => {

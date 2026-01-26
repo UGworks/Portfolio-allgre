@@ -47,7 +47,6 @@ function App() {
             onProjectChange={setActiveProject}
             onWheelingChange={setIsWheeling}
             isIntro={!hasPlayedIntro}
-            introContentDelayMs={introContentDelayMs}
             introMaskDelayMs={introMaskDelayMs}
             introSidebarDelayMs={introSidebarDelayMs}
           />
