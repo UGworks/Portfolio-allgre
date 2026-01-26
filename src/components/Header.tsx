@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             >
               작업물
             </a>
-            <a 
+            {/* <a 
               href="#about" 
               className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
               onClick={(e) => {
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
               }}
             >
               나에 대하여
-            </a>
+            </a> */}
             <a 
               href="#contact" 
               className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
@@ -112,7 +112,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             >
               작업물
             </a>
-            <a 
+            {/* <a 
               href="#about" 
               className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
               onClick={(e) => {
@@ -122,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
               }}
             >
               나에 대하여
-            </a>
+            </a> */}
             <a 
               href="#contact" 
               className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
