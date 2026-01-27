@@ -303,8 +303,8 @@ const ProjectSidebar = ({
       {/* 모바일: 상단 가로 스크롤 */}
       <motion.div
         ref={mobileSidebarRef}
-        initial={isIntro ? { y: -100 } : false}
-        animate={{ y: 0 }}
+        initial={isIntro ? { x: '-100%' } : false}
+        animate={{ x: 0 }}
         transition={{ duration: 0.6, ease: 'easeInOut', delay: isIntro ? introDelayMs / 1000 : 0 }}
         className="md:hidden fixed top-16 left-0 right-0 h-20 overflow-x-auto overflow-y-hidden border-b border-gray-200 bg-white z-30"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}

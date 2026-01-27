@@ -270,17 +270,29 @@ const PortfolioLayout = ({
       const absDeltaX = Math.abs(deltaX);
       const absDeltaY = Math.abs(deltaY);
 
-      // 수직 스와이프만 처리 (가로 스와이프는 무시)
-      if (absDeltaY > absDeltaX && absDeltaY > 30 && deltaTime < 300) {
+      // 스와이프 감지 (수직 또는 가로)
+      if ((absDeltaY > 30 || absDeltaX > 30) && deltaTime < 300) {
         const currentIndex = activeIndexRef.current;
         let newIndex: number;
 
-        if (deltaY > 0) {
-          // 아래로 스와이프 - 다음 프로젝트 (순환)
-          newIndex = (currentIndex + 1) % projects.length;
+        // 수직 스와이프 우선 처리
+        if (absDeltaY > absDeltaX) {
+          if (deltaY > 0) {
+            // 아래로 스와이프 - 다음 프로젝트 (순환)
+            newIndex = (currentIndex + 1) % projects.length;
+          } else {
+            // 위로 스와이프 - 이전 프로젝트 (순환)
+            newIndex = (currentIndex - 1 + projects.length) % projects.length;
+          }
         } else {
-          // 위로 스와이프 - 이전 프로젝트 (순환)
-          newIndex = (currentIndex - 1 + projects.length) % projects.length;
+          // 가로 스와이프 처리
+          if (deltaX > 0) {
+            // 오른쪽으로 스와이프 - 이전 프로젝트 (순환)
+            newIndex = (currentIndex - 1 + projects.length) % projects.length;
+          } else {
+            // 왼쪽으로 스와이프 - 다음 프로젝트 (순환)
+            newIndex = (currentIndex + 1) % projects.length;
+          }
         }
 
         // 즉시 전환
@@ -373,8 +385,8 @@ const PortfolioLayout = ({
             left: isMobile ? 0 : '20rem', // 사이드바 너비 (80 = 20rem)
             right: isMobile ? 0 : '24rem', // General Info Panel 너비 (96 = 24rem)
             // 모바일: 썸네일 아래에서 시작하는 1:1 비율 프레임 (썸네일 영역 제외)
-            // 헤더(4rem=64px) + 썸네일(h-20=20px) = 84px 아래에서 시작
-            top: isMobile ? 'calc(4rem + 20px)' : '4rem', // 모바일: 헤더(64px) + 썸네일(20px) = 84px
+            // 헤더(4rem=64px) + 썸네일(h-20=20px) + 80px = 164px 아래에서 시작
+            top: isMobile ? 'calc(4rem + 20px + 80px)' : '4rem', // 모바일: 헤더(64px) + 썸네일(20px) + 80px = 164px
             height: isMobile ? '100vw' : 'calc(100vh - 4rem)', // 모바일: 화면 너비와 동일한 높이 (1:1)
             width: isMobile ? '100vw' : 'auto', // 모바일: 전체 너비
             bottom: isMobile ? 'auto' : 0,

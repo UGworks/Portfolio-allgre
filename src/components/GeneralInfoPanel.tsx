@@ -53,20 +53,20 @@ const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, is
                  p-4 md:p-8 bg-white z-30 overflow-y-auto
                  md:h-[calc(100vh-4rem)]"
       style={{
-        top: isMobile ? 'calc(4rem + 20px + 100vw)' : undefined, // 모바일: 헤더 + 썸네일 + 1:1 영상 영역 아래
+        top: isMobile ? 'calc(4rem + 20px + 80px + 100vw)' : undefined, // 모바일: 헤더 + 썸네일 + 80px + 1:1 영상 영역 아래
         bottom: isMobile ? 0 : undefined,
         height: isMobile ? 'auto' : undefined,
-        maxHeight: isMobile ? 'calc(100vh - 4rem - 20px - 100vw)' : undefined
+        maxHeight: isMobile ? 'calc(100vh - 4rem - 20px - 80px - 100vw)' : undefined
       }}
     >
       <AnimatePresence mode="wait">
         {activeProject ? (
           <motion.div
             key={activeProject.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
             <h2 className="text-xl font-medium mb-4">{activeProject.title}</h2>
             <p className="text-xs text-gray-500 font-light mb-6">{activeProject.category}</p>
@@ -96,10 +96,10 @@ const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, is
         ) : (
           <motion.div
             key="general"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
             <h2 className="text-xl font-medium mb-6">General Info</h2>
             
