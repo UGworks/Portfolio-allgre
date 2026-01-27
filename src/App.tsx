@@ -3,10 +3,12 @@ import Header from './components/Header';
 import PortfolioLayout from './components/PortfolioLayout';
 import GeneralInfoPanel from './components/GeneralInfoPanel';
 import AboutPage from './components/AboutPage';
+import PasswordProtection from './components/PasswordProtection';
 import { projects, info } from './data';
 import { Project } from './types';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
   const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
@@ -32,6 +34,11 @@ function App() {
       setHasPlayedIntro(true);
     }
   }, [activeSection, introTotalMs]);
+
+  // 인증되지 않은 경우 비밀번호 입력 화면 표시
+  if (!isAuthenticated) {
+    return <PasswordProtection onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div className="min-h-screen bg-white">
