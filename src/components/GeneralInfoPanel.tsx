@@ -68,30 +68,57 @@ const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, is
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-xl font-medium mb-4">{activeProject.title}</h2>
-            <p className="text-xs text-gray-500 font-light mb-6">{activeProject.category}</p>
+            <h2 className={`text-xl font-medium ${isMobile ? 'mb-2' : 'mb-4'}`}>{activeProject.title}</h2>
+            <p className={`text-xs text-gray-500 font-light ${isMobile ? 'mb-2' : 'mb-4'}`}>{activeProject.category}</p>
             
-            <div className="space-y-4 text-sm font-light leading-relaxed">
-              {activeProject.description ? (
-                activeProject.description.split('\n\n').map((paragraph, index) => (
-                  paragraph.trim() && (
-                    <p key={index} className="text-gray-700">
-                      {paragraph.trim()}
-                    </p>
-                  )
-                ))
-              ) : (
-                <>
-                  <p className="text-gray-700">
-                    This project represents a comprehensive exploration of {activeProject.category.toLowerCase()}, combining innovative design principles with meticulous attention to detail. The work demonstrates a deep understanding of visual communication and user experience, creating a cohesive narrative that resonates with the target audience.
-                  </p>
-                  
-                  <p className="text-gray-700">
-                    Through careful consideration of form, function, and aesthetic harmony, this project showcases the intersection of creative vision and technical excellence. Each element has been thoughtfully crafted to contribute to an overall experience that is both engaging and meaningful.
-                  </p>
-                </>
-              )}
+            {/* 참여도 막대그래프 */}
+            <div className={`${isMobile ? 'mb-2' : 'mb-6'}`}>
+              <p className="text-xs text-gray-500 font-light mb-2">참여도</p>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-2 bg-gray-200 relative overflow-hidden">
+                  <motion.div
+                    className="h-full bg-black"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${activeProject.participation ?? 65}%` }}
+                    transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+                  />
+                </div>
+                <span className="text-xs text-gray-700 font-light whitespace-nowrap">
+                  {activeProject.participation ?? 65}%
+                </span>
+              </div>
             </div>
+            
+            {/* 모바일: 소제목만 표시, PC: 전체 설명 표시 */}
+            {isMobile ? (
+              activeProject.description && (
+                <p className="text-sm text-gray-700 font-light leading-tight">
+                  {activeProject.description.split('\n\n')[0].trim()}
+                </p>
+              )
+            ) : (
+              <div className="space-y-4 text-sm font-light leading-relaxed">
+                {activeProject.description ? (
+                  activeProject.description.split('\n\n').map((paragraph, index) => (
+                    paragraph.trim() && (
+                      <p key={index} className="text-gray-700">
+                        {paragraph.trim()}
+                      </p>
+                    )
+                  ))
+                ) : (
+                  <>
+                    <p className="text-gray-700">
+                      This project represents a comprehensive exploration of {activeProject.category.toLowerCase()}, combining innovative design principles with meticulous attention to detail. The work demonstrates a deep understanding of visual communication and user experience, creating a cohesive narrative that resonates with the target audience.
+                    </p>
+                    
+                    <p className="text-gray-700">
+                      Through careful consideration of form, function, and aesthetic harmony, this project showcases the intersection of creative vision and technical excellence. Each element has been thoughtfully crafted to contribute to an overall experience that is both engaging and meaningful.
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
           </motion.div>
         ) : (
           <motion.div

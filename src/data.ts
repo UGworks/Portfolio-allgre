@@ -92,27 +92,23 @@ import video1111 from './video/1111_PRE_A.webm';
 import video1130 from './video/1130_INDIVIDUAL_TANKER.webm';
 import video15A from './video/15A.webm';
 import video15B from './video/15B.webm';
-import video1M30S from './video/1M30S.webm';
 import video20_1 from './video/20_1.webm';
 import video20 from './video/20.webm';
 import video30 from './video/30.webm';
-import video30B from './video/30B.webm';
 import video45A from './video/45A.webm';
 import videoA_B_X from './video/A_B_X.webm';
-import videoBCCARD from './video/BC CARD.webm';
 import videoCAFE_30 from './video/CAFE_30.webm';
 import videocellapy from './video/cellapy.webm';
 import videoDROPTOP_60 from './video/DROPTOP_60.webm';
 import videoDXGOLF_DRIVER_15 from './video/DXGOLF_DRIVER_15.webm';
 import videoEMART_MAIN from './video/EMART_MAIN.webm';
 import videoFinal_comp from './video/Final comp.webm';
-import videoFULL_A_GOOGLE from './video/FULL_A_GOOGLE.webm';
 import videoGENESIS from './video/GENESIS_2DAY_IMAGE+TECH_ENG_MENT_H264.webm';
 import videoGROUP_FULL_A from './video/GROUP_FULL_A.webm';
 import videoK40S from './video/K40S.webm';
 import videoK50 from './video/K50.webm';
 import videoKELLOG from './video/KELLOG.webm';
-import videoKGM_MV_1 from './video/KGM_MV_1.webm';
+import videoNC_SOFT_20th from './video/NC SOFT 20th.webm';
 import videoKGM_MV from './video/KGM_MV.webm';
 import videokim_johan from './video/kim johan.webm';
 import videoLG from './video/LG.webm';
@@ -125,7 +121,6 @@ import videoMAIN_2997 from './video/MAIN_2997_수정.webm';
 import videoMAIN from './video/MAIN.webm';
 import videoMANGO from './video/MANGO.webm';
 import videoMILLET_30 from './video/MILLET_30.webm';
-import videoNEPA from './video/NEPA.webm';
 import videoNEXEN_A from './video/NEXEN_A.webm';
 import videoOFFICE_30 from './video/OFFICE_30.webm';
 import videoOOH_15 from './video/OOH_15.webm';
@@ -161,21 +156,17 @@ import thumb1111 from './IMG/1111_PRE_A.webm_20260121_230953.707.webp';
 import thumb1130 from './IMG/1130_INDIVIDUAL_TANKER.webm_20260121_231011.330.webp';
 import thumb15A from './IMG/15A.webm_20260121_230608.348.webp';
 import thumb15B from './IMG/15B.webm_20260121_230752.796.webp';
-import thumb1M30S from './IMG/1M30S.webm_20260121_230716.421.webp';
 import thumb20_1 from './IMG/20_1.webm_20260121_230807.124.webp';
 import thumb20 from './IMG/20.webm_20260121_230757.276.webp';
 import thumb30 from './IMG/30.webm_20260121_230821.739.webp';
-import thumb30B from './IMG/30B.webm_20260121_230848.012.webp';
 import thumb45A from './IMG/45A.webm_20260121_230852.980.webp';
 import thumbA_B_X from './IMG/A_B_X.webm_20260121_231021.697.webp';
-import thumbBCCARD from './IMG/BC CARD.webm_20260121_231025.314.webp';
 import thumbCAFE_30 from './IMG/CAFE_30.webm_20260121_231042.010.webp';
 import thumbcellapy from './IMG/cellapy.webm_20260121_231053.090.webp';
 import thumbDROPTOP_60 from './IMG/DROPTOP_60.webm_20260121_231103.979.webp';
 import thumbDXGOLF_DRIVER_15 from './IMG/DXGOLF_DRIVER_15.webm_20260121_231110.057.webp';
 import thumbEMART_MAIN from './IMG/EMART_MAIN.webm_20260121_231115.387.webp';
 import thumbFinal_comp from './IMG/Final comp.webm_20260121_231120.858.webp';
-import thumbFULL_A_GOOGLE from './IMG/FULL_A_GOOGLE.webm_20260121_231139.954.webp';
 import thumbGENESIS from './IMG/GENESIS_2DAY_IMAGE+TECH_ENG_MENT_H264.webm_20260121_231145.146.webp';
 import thumbGROUP_FULL_A from './IMG/GROUP_FULL_A.webm_20260121_231153.401.webp';
 import thumbK40S from './IMG/K40S.webm_20260121_231227.873.webp';
@@ -193,7 +184,6 @@ import thumbMAIN_2997 from './IMG/MAIN_2997_수정.webm_20260121_231405.560.webp
 import thumbMAIN from './IMG/MAIN.webm_20260121_231353.752.webp';
 import thumbMANGO from './IMG/MANGO.webm_20260121_231411.056.webp';
 import thumbMILLET_30 from './IMG/MILLET_30.webm_20260121_231415.945.webp';
-import thumbNEPA from './IMG/NEPA.png';
 import thumbNEXEN_A from './IMG/NEXEN_A.webm_20260121_231428.888.webp';
 import thumbOFFICE_30 from './IMG/OFFICE_30.webm_20260121_231438.112.webp';
 import thumbOOH_15 from './IMG/OOH_15.webm_20260121_231447.888.webp';
@@ -216,6 +206,8 @@ import thumb젠틀피버_FULL_B from './IMG/젠틀피버_FULL_B.webm_20260121_23
 import thumb프렌치카페 from './IMG/프렌치카페 카페믹스.png';
 import thumb하나금융그룹 from './IMG/하나금융그룹 실적발표.png';
 import thumb현대자동차 from './IMG/현대자동차 월드컵.png';
+import thumbVERNA from './IMG/VERNA.png';
+import thumb카와 from './IMG/카와.png';
 
 export const projects: Project[] = [
   {
@@ -224,6 +216,7 @@ export const projects: Project[] = [
     category: "Commercial",
     video: video0129,
     thumbnail: thumb0129,
+    participation: 65,
     description: "생명을 책임지는 기술 \n\n본 프로젝트는 'Best Life Solution Company'라는 코웨이의 비전과 '생명을 책임지는 기술'이라는 핵심 가치를 전달하기 위한 그룹 PR 영상입니다. 업계 1위 기업으로서의 신뢰감과 아이콘 정수기 등 혁신 제품의 가치를 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 코웨이만의 브랜드 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
@@ -291,14 +284,6 @@ export const projects: Project[] = [
     description: "15초 광고 캠페인 B\n\n본 프로젝트는 15초 단위의 광고 영상으로, 짧은 시간 내에 브랜드의 핵심 메시지를 효과적으로 전달하기 위해 제작되었습니다. 시각적 임팩트와 메시지 전달의 균형을 맞추기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
-    id: "10",
-    title: "1M30S",
-    category: "Commercial",
-    video: video1M30S,
-    thumbnail: thumb1M30S,
-    description: "1분 30초 광고 캠페인\n\n본 프로젝트는 1분 30초 길이의 광고 영상으로, 브랜드의 스토리를 풍부하게 전달하기 위해 제작되었습니다. 긴 러닝타임을 활용하여 브랜드의 핵심 가치와 제품의 특징을 상세하게 소개하고, 시각적 스토리텔링을 통해 소비자들에게 강렬한 인상을 남기는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
-  },
-  {
     id: "11",
     title: "20_1",
     category: "Commercial",
@@ -323,14 +308,6 @@ export const projects: Project[] = [
     description: "30초 광고 캠페인\n\n본 프로젝트는 30초 단위의 광고 영상으로, 브랜드의 핵심 메시지를 효과적으로 전달하기 위해 제작되었습니다. 시각적 임팩트와 메시지 전달의 균형을 맞추기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
-    id: "14",
-    title: "30B",
-    category: "Commercial",
-    video: video30B,
-    thumbnail: thumb30B,
-    description: "30초 광고 캠페인 B\n\n본 프로젝트는 30초 단위의 광고 영상으로, 브랜드의 핵심 메시지를 효과적으로 전달하기 위해 제작되었습니다. 시각적 임팩트와 메시지 전달의 균형을 맞추기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
-  },
-  {
     id: "15",
     title: "45A",
     category: "Commercial",
@@ -345,14 +322,6 @@ export const projects: Project[] = [
     video: videoA_B_X,
     thumbnail: thumbA_B_X,
     description: "A_B_X 캠페인\n\n본 프로젝트는 A_B_X 브랜드의 제품 홍보를 위한 광고 영상입니다. 브랜드의 핵심 메시지와 제품의 독특한 특징을 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
-  },
-  {
-    id: "17",
-    title: "BC CARD",
-    category: "Commercial",
-    video: videoBCCARD,
-    thumbnail: thumbBCCARD,
-    description: "BC CARD 브랜드 캠페인\n\n본 프로젝트는 BC CARD의 브랜드 아이덴티티를 강조하기 위한 광고 영상입니다. 금융 서비스의 신뢰성과 혁신적인 서비스를 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
     id: "18",
@@ -403,14 +372,6 @@ export const projects: Project[] = [
     description: "최종 컴포지트 작업\n\n본 프로젝트는 최종 컴포지트 작업을 통한 광고 영상입니다. 다양한 소스와 그래픽 요소를 통합하여 완성도 높은 최종 영상을 제작하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
-    id: "24",
-    title: "FULL A GOOGLE",
-    category: "Commercial",
-    video: videoFULL_A_GOOGLE,
-    thumbnail: thumbFULL_A_GOOGLE,
-    description: "Google 풀 버전 광고 A\n\n본 프로젝트는 Google 브랜드의 풀 버전 광고 영상입니다. 글로벌 기술 기업으로서의 혁신성과 서비스의 가치를 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
-  },
-  {
     id: "25",
     title: "GENESIS 2DAY",
     category: "Commercial",
@@ -454,7 +415,7 @@ export const projects: Project[] = [
     id: "31",
     title: "NC Soft 20주년",
     category: "Commercial",
-    video: videoKGM_MV_1,
+    video: videoNC_SOFT_20th,
     thumbnail: thumbKGM_MV_1,
     description: "NC Soft 20주년 기념 영상\n\n본 프로젝트는 NC Soft의 20주년을 기념하기 위해 제작된 기념 영상입니다. 게임 업계의 선도 기업으로서의 성장과 혁신을 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
@@ -552,14 +513,6 @@ export const projects: Project[] = [
     video: videoMILLET_30,
     thumbnail: thumbMILLET_30,
     description: "밀레 30초 광고 캠페인\n\n본 프로젝트는 밀레 브랜드의 제품 홍보를 위한 30초 광고 영상입니다. 아웃도어 브랜드로서의 전문성과 제품의 성능을 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
-  },
-  {
-    id: "41-1",
-    title: "NEPA",
-    category: "Commercial",
-    video: videoNEPA,
-    thumbnail: thumbNEPA,
-    description: "네파 브랜드 캠페인\n\n본 프로젝트는 네파 브랜드의 제품 홍보를 위한 광고 영상입니다. 아웃도어 브랜드로서의 전문성과 제품의 성능을 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
     id: "42",
@@ -662,6 +615,7 @@ export const projects: Project[] = [
     title: "VERNA",
     category: "Commercial",
     video: videoVERNA,
+    thumbnail: thumbVERNA,
     description: "현대 베르나 광고 캠페인\n\n본 프로젝트는 현대자동차 베르나 모델의 제품 홍보를 위한 광고 영상입니다. 자동차 브랜드로서의 신뢰성과 제품의 성능을 시각적으로 강조하기 위해, 전체적인 톤 앤 매너를 정교하게 조율하며 브랜드만의 고유한 아이덴티티를 선명하게 구현하는 데 집중했습니다.\n\n2D Artist로서 영상 전반의 그래픽 작업 지원과 더불어 매트 페인팅(Matte Painting), 클린 업(Clean-up) 작업을 수행하여 시각적 완성도를 극대화했습니다. 특히 고화질 영상 내 불필요한 요소를 정밀하게 제거하는 클린 작업을 통해 무결점의 화면을 구성하였으며, 실사 소스와 그래픽 요소 간의 유기적인 합성을 통해 브랜드의 신뢰도와 제품의 세련미가 돋보이는 고품질의 결과물을 도출했습니다.",
   },
   {
@@ -725,6 +679,7 @@ export const projects: Project[] = [
     title: "카와",
     category: "Commercial",
     video: video카와,
+    thumbnail: thumb카와,
     description: "커피의 탑 카와\n\n본 프로젝트는 프리미엄 RTD 커피 브랜드 '카와(KAWA)'의 브랜드 캠페인 광고 영상입니다. '커피의 탑'이라는 슬로건에 걸맞은 최고급 브랜드 이미지를 시각적으로 전달하기 위해, 전반적인 톤 앤 매너를 세련되고 우아하게 구축하며 카와만의 고유한 프리미엄 아이덴티티를 선명하게 구현하는 데 집중했습니다. 제품이 가진 깊은 풍미와 고급스러운 감성을 소비자에게 직관적으로 전달하는 고품질 비주얼을 목표로 진행되었습니다.\n\n2D Artist로서 영상의 심미적 완성도를 극대화하는 후반 작업을 수행했습니다. 특히 고화질 영상 내의 불필요한 요소를 완벽하게 제거하는 클린 업(Clean-up) 작업과 공간의 입체감 및 깊이감을 재구성하는 매트 페인팅(Matte Painting) 작업을 통해 무결점의 화면을 구성했습니다. 실사 소스와 디지털 그래픽 간의 정교하고 유기적인 합성을 통해 브랜드의 신뢰도를 높이고, 제품의 고급스러운 질감이 돋보이는 밀도 높은 결과물을 도출했습니다.",
   },
   {
