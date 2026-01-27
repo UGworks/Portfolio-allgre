@@ -126,14 +126,19 @@ const ProjectSidebar = ({
     const sidebar = mobileSidebarRef.current;
     
     if (activeItem && sidebar && !isIntro) {
-      const itemWidth = activeItem.offsetWidth;
-      const sidebarWidth = sidebar.clientWidth;
-      const targetScrollLeft = activeItem.offsetLeft - (sidebarWidth / 2) + (itemWidth / 2);
+      // 약간의 딜레이를 주어 DOM 업데이트 후 스크롤
+      const timeoutId = setTimeout(() => {
+        const itemWidth = activeItem.offsetWidth;
+        const sidebarWidth = sidebar.clientWidth;
+        const targetScrollLeft = activeItem.offsetLeft - (sidebarWidth / 2) + (itemWidth / 2);
+        
+        sidebar.scrollTo({
+          left: targetScrollLeft,
+          behavior: 'smooth'
+        });
+      }, 50);
       
-      sidebar.scrollTo({
-        left: targetScrollLeft,
-        behavior: 'smooth'
-      });
+      return () => clearTimeout(timeoutId);
     }
   }, [activeIndex, isIntro, projects.length, isMobile]);
 
@@ -171,9 +176,12 @@ const ProjectSidebar = ({
     };
   }, [projects.length, isMobile]);
 
-  const loopedProjects = Array.from({ length: loopCount }, (_, loopIndex) =>
-    projects.map((project, index) => ({ project, index, loopIndex }))
-  ).flat();
+  // PC: 무한 루핑을 위한 3번 반복, 모바일: 1번만 (루핑 없음)
+  const loopedProjects = isMobile 
+    ? projects.map((project, index) => ({ project, index, loopIndex: 0 }))
+    : Array.from({ length: loopCount }, (_, loopIndex) =>
+        projects.map((project, index) => ({ project, index, loopIndex }))
+      ).flat();
 
   // 사이드바에서 휠 이벤트를 막아서 전체 페이지 휠 이벤트만 작동하도록
   useEffect(() => {
