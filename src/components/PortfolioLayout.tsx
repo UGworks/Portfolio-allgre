@@ -23,6 +23,7 @@ const PortfolioLayout = ({
 }: PortfolioLayoutProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isWheeling, setIsWheeling] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mainDisplayRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
@@ -31,6 +32,17 @@ const PortfolioLayout = ({
   const imageAutoTransitionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAutoTransitioningRef = useRef(false);
   const onProjectChangeRef = useRef(onProjectChange);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+
+  // 모바일 여부 확인
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // onProjectChange ref 업데이트
   useEffect(() => {
@@ -168,16 +180,20 @@ const PortfolioLayout = ({
       }
     };
 
-    // 휠 이벤트 리스너
-    document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    // 휠 이벤트 리스너 (PC만)
+    if (!isMobile) {
+      document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+    }
 
     return () => {
-      document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
+      if (!isMobile) {
+        document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
+      }
       if (wheelStopTimeoutRef.current) {
         clearTimeout(wheelStopTimeoutRef.current);
       }
     };
-  }, [projects.length]);
+  }, [projects.length, isMobile]);
 
   const handleProjectClick = (index: number) => {
     // 기존 이미지 자동 전환 타이머 취소
@@ -222,6 +238,77 @@ const PortfolioLayout = ({
     }
   };
 
+  // 모바일: 터치 스와이프 이벤트 처리
+  useEffect(() => {
+    if (!isMobile || !mainDisplayRef.current) return;
+
+    const displayElement = mainDisplayRef.current;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      touchStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        time: Date.now()
+      };
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      // 스와이프 중에는 기본 동작 방지
+      if (touchStartRef.current) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!touchStartRef.current) return;
+
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - touchStartRef.current.x;
+      const deltaY = touch.clientY - touchStartRef.current.y;
+      const deltaTime = Date.now() - touchStartRef.current.time;
+      const absDeltaX = Math.abs(deltaX);
+      const absDeltaY = Math.abs(deltaY);
+
+      // 수직 스와이프만 처리 (가로 스와이프는 무시)
+      if (absDeltaY > absDeltaX && absDeltaY > 30 && deltaTime < 300) {
+        const currentIndex = activeIndexRef.current;
+        let newIndex: number;
+
+        if (deltaY > 0) {
+          // 아래로 스와이프 - 다음 프로젝트 (순환)
+          newIndex = (currentIndex + 1) % projects.length;
+        } else {
+          // 위로 스와이프 - 이전 프로젝트 (순환)
+          newIndex = (currentIndex - 1 + projects.length) % projects.length;
+        }
+
+        // 즉시 전환
+        activeIndexRef.current = newIndex;
+        setActiveIndex(newIndex);
+        if (onProjectChangeRef.current) {
+          onProjectChangeRef.current(projects[newIndex]);
+        }
+
+        // 스크롤 위치 동기화
+        const scrollTo = (newIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
+        window.scrollTo({ top: scrollTo, behavior: 'auto' });
+      }
+
+      touchStartRef.current = null;
+    };
+
+    displayElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+    displayElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+    displayElement.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      displayElement.removeEventListener('touchstart', handleTouchStart);
+      displayElement.removeEventListener('touchmove', handleTouchMove);
+      displayElement.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [projects.length, isMobile]);
+
   // 초기 프로젝트 설정 및 인덱스 초기화
   useEffect(() => {
     if (projects.length > 0) {
@@ -265,10 +352,10 @@ const PortfolioLayout = ({
 
       {/* 모바일: 메인 컨텐츠 영역, PC: 오른쪽 메인 영역 */}
       <div className="md:ml-80 min-h-screen relative">
-        {/* 모바일: 전체 화면 메인 디스플레이, PC: 오른쪽 하단 메인 디스플레이 영역 (검은색 배경) */}
+        {/* 모바일: 썸네일 아래 1:1 비율 영상 영역, PC: 오른쪽 하단 메인 디스플레이 영역 (검은색 배경) */}
         <motion.div
           ref={mainDisplayRef}
-          className="fixed bottom-0 bg-black z-20 md:left-80 md:right-96 left-0 right-0 md:h-[calc(100vh-4rem)]"
+          className="fixed bg-black"
           initial={isIntro ? { clipPath: 'inset(100% 0 0 0)', opacity: 0 } : false}
           animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1 }}
           transition={
@@ -282,8 +369,16 @@ const PortfolioLayout = ({
               : { duration: 0 }
           }
           style={{ 
-            height: 'calc(100vh - 4rem - 20px - 50vh)', // 모바일: 헤더(4rem) + 썸네일바(20px) + 하단 패널(50vh)
-            top: 'calc(4rem + 20px)', // 모바일: 헤더 아래 썸네일바
+            // PC: 원래 스타일
+            left: isMobile ? 0 : '20rem', // 사이드바 너비 (80 = 20rem)
+            right: isMobile ? 0 : '24rem', // General Info Panel 너비 (96 = 24rem)
+            // 모바일: 썸네일 아래에서 시작하는 1:1 비율 프레임 (썸네일 영역 제외)
+            // 헤더(4rem=64px) + 썸네일(h-20=20px) = 84px 아래에서 시작
+            top: isMobile ? 'calc(4rem + 20px)' : '4rem', // 모바일: 헤더(64px) + 썸네일(20px) = 84px
+            height: isMobile ? '100vw' : 'calc(100vh - 4rem)', // 모바일: 화면 너비와 동일한 높이 (1:1)
+            width: isMobile ? '100vw' : 'auto', // 모바일: 전체 너비
+            bottom: isMobile ? 'auto' : 0,
+            zIndex: isMobile ? 10 : 20, // 모바일: 썸네일(z-30) 아래, PC: 기존 유지
             overflow: 'hidden',
             clipPath: 'inset(0 0 0 0)'
           }}

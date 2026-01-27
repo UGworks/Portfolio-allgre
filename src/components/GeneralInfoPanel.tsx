@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { info } from '../data';
 import { Project } from '../types';
@@ -12,6 +12,17 @@ interface GeneralInfoPanelProps {
 
 const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, isWheeling = false }: GeneralInfoPanelProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 모바일 여부 확인
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // 패널에서 휠 이벤트를 막아서 전체 페이지 휠 이벤트만 작동하도록
   useEffect(() => {
@@ -37,10 +48,16 @@ const GeneralInfoPanel = ({ activeProject, isIntro = false, introDelayMs = 0, is
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: isWheeling ? 0.3 : 1, y: 0 }}
       transition={{ duration: 0.3, delay: isIntro ? introDelayMs / 1000 : 0 }}
-      className="fixed md:top-16 md:right-0 md:w-96 md:border-l md:border-gray-200
-                 top-auto bottom-0 left-0 right-0 w-full border-t border-gray-200
+      className="fixed left-0 right-0 w-full border-t border-gray-200
+                 md:top-16 md:left-auto md:right-0 md:w-96 md:border-t-0 md:border-l md:border-gray-200
                  p-4 md:p-8 bg-white z-30 overflow-y-auto
-                 h-[50vh] md:h-[calc(100vh-4rem)]"
+                 md:h-[calc(100vh-4rem)]"
+      style={{
+        top: isMobile ? 'calc(4rem + 20px + 100vw)' : undefined, // 모바일: 헤더 + 썸네일 + 1:1 영상 영역 아래
+        bottom: isMobile ? 0 : undefined,
+        height: isMobile ? 'auto' : undefined,
+        maxHeight: isMobile ? 'calc(100vh - 4rem - 20px - 100vw)' : undefined
+      }}
     >
       <AnimatePresence mode="wait">
         {activeProject ? (

@@ -16,6 +16,17 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
   const [imageLoaded, setImageLoaded] = useState(false);
   const [videoOpacity, setVideoOpacity] = useState(1);
   const prevProjectIdRef = useRef<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 모바일 여부 확인
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (videoRef.current && project?.video && isVisible) {
@@ -128,7 +139,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
   }
 
   return (
-    <div className="absolute inset-0 bg-black flex items-center justify-center p-4 md:p-8" style={{ overflow: 'hidden' }}>
+    <div className="absolute inset-0 bg-black flex items-center justify-center md:p-8" style={{ overflow: 'hidden', padding: isMobile ? '16px' : undefined }}>
       {isVisible && (
         <motion.div 
           key={project.id}
@@ -145,12 +156,16 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
             <video
               ref={videoRef}
               src={project.video}
-              className="max-w-full max-h-full w-auto h-auto object-contain"
+              className="w-auto h-auto object-contain"
               style={{ 
                 aspectRatio: 'auto',
                 display: 'block',
                 opacity: videoOpacity,
-                transition: 'opacity 0.3s ease-out'
+                transition: 'opacity 0.3s ease-out',
+                maxWidth: isMobile ? 'calc(100% - 32px)' : '100%',
+                maxHeight: isMobile ? 'calc(100% - 32px)' : '100%',
+                width: isMobile ? 'auto' : 'auto',
+                height: isMobile ? 'auto' : 'auto'
               }}
               muted
               playsInline
@@ -167,12 +182,16 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
             <img
               src={project.image}
               alt={project.title}
-              className="max-w-full max-h-full w-auto h-auto object-contain"
+              className="w-auto h-auto object-contain"
               style={{ 
                 aspectRatio: 'auto',
                 display: 'block',
                 opacity: imageLoaded ? 1 : 0,
-                transition: 'opacity 0.2s ease-in-out'
+                transition: 'opacity 0.2s ease-in-out',
+                maxWidth: isMobile ? 'calc(100% - 32px)' : '100%',
+                maxHeight: isMobile ? 'calc(100% - 32px)' : '100%',
+                width: isMobile ? 'auto' : 'auto',
+                height: isMobile ? 'auto' : 'auto'
               }}
               onLoad={() => setImageLoaded(true)}
             />
