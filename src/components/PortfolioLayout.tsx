@@ -180,15 +180,11 @@ const PortfolioLayout = ({
       }
     };
 
-    // 휠 이벤트 리스너 (PC만)
-    if (!isMobile) {
-      document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-    }
+    // 휠 이벤트 리스너 (PC와 모바일 모두)
+    document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
 
     return () => {
-      if (!isMobile) {
-        document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
-      }
+      document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
       if (wheelStopTimeoutRef.current) {
         clearTimeout(wheelStopTimeoutRef.current);
       }

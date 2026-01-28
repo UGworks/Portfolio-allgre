@@ -118,7 +118,7 @@ const ProjectSidebar = ({
     };
   }, [activeIndex, isIntro, projects.length, isMobile]);
 
-  // 모바일: activeIndex가 변경될 때 가로 스크롤 중앙 정렬
+  // 모바일: activeIndex가 변경될 때 가로 스크롤 중앙 정렬 (루핑 고려)
   useEffect(() => {
     if (!isMobile) return;
     
@@ -128,21 +128,38 @@ const ProjectSidebar = ({
     if (activeItem && sidebar && !isIntro) {
       // 약간의 딜레이를 주어 DOM 업데이트 후 스크롤
       const timeoutId = setTimeout(() => {
+        const listWidth = sidebar.scrollWidth / loopCount;
         const itemWidth = activeItem.offsetWidth;
         const sidebarWidth = sidebar.clientWidth;
-        const targetScrollLeft = activeItem.offsetLeft - (sidebarWidth / 2) + (itemWidth / 2);
+        const currentScrollLeft = sidebar.scrollLeft;
+        
+        // 중앙 루프에서의 타겟 스크롤 위치
+        const targetInCenterLoop = activeItem.offsetLeft - (sidebarWidth / 2) + (itemWidth / 2);
+        
+        // 현재 위치에서 가장 가까운 루프의 타겟 위치 계산
+        let targetScroll = targetInCenterLoop;
+        const distanceToCenter = Math.abs(currentScrollLeft - targetInCenterLoop);
+        const distanceToLeft = Math.abs(currentScrollLeft - (targetInCenterLoop - listWidth));
+        const distanceToRight = Math.abs(currentScrollLeft - (targetInCenterLoop + listWidth));
+        
+        // 가장 가까운 루프 선택
+        if (distanceToLeft < distanceToCenter && distanceToLeft < distanceToRight) {
+          targetScroll = targetInCenterLoop - listWidth;
+        } else if (distanceToRight < distanceToCenter && distanceToRight < distanceToLeft) {
+          targetScroll = targetInCenterLoop + listWidth;
+        }
         
         sidebar.scrollTo({
-          left: targetScrollLeft,
+          left: targetScroll,
           behavior: 'smooth'
         });
-      }, 50);
+      }, 100);
       
       return () => clearTimeout(timeoutId);
     }
-  }, [activeIndex, isIntro, projects.length, isMobile]);
+  }, [activeIndex, isIntro, projects.length, isMobile, loopCount]);
 
-  // 무한 루핑 스크롤 설정 (중앙에서 시작하고 끝에 도달하면 점프) - PC만 적용
+  // 무한 루핑 스크롤 설정 (중앙에서 시작하고 끝에 도달하면 점프) - PC: 세로 스크롤
   useEffect(() => {
     if (isMobile) return;
     
@@ -176,17 +193,49 @@ const ProjectSidebar = ({
     };
   }, [projects.length, isMobile]);
 
-  // PC: 무한 루핑을 위한 3번 반복, 모바일: 1번만 (루핑 없음)
-  const loopedProjects = isMobile 
-    ? projects.map((project, index) => ({ project, index, loopIndex: 0 }))
-    : Array.from({ length: loopCount }, (_, loopIndex) =>
-        projects.map((project, index) => ({ project, index, loopIndex }))
-      ).flat();
+  // 모바일: 가로 무한 루핑 스크롤 설정
+  useEffect(() => {
+    if (!isMobile) return;
+    
+    const sidebar = mobileSidebarRef.current;
+    if (!sidebar || projects.length === 0) return;
 
-  // 사이드바에서 휠 이벤트를 막아서 전체 페이지 휠 이벤트만 작동하도록
+    const setInitialPosition = () => {
+      const listWidth = sidebar.scrollWidth / loopCount;
+      if (listWidth > 0) {
+        sidebar.scrollLeft = listWidth;
+      }
+    };
+
+    const handleLoopScroll = () => {
+      const listWidth = sidebar.scrollWidth / loopCount;
+      if (listWidth <= 0) return;
+
+      if (sidebar.scrollLeft <= listWidth * 0.25) {
+        sidebar.scrollLeft += listWidth;
+      } else if (sidebar.scrollLeft >= listWidth * 1.75) {
+        sidebar.scrollLeft -= listWidth;
+      }
+    };
+
+    const rafId = requestAnimationFrame(setInitialPosition);
+    sidebar.addEventListener('scroll', handleLoopScroll, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      sidebar.removeEventListener('scroll', handleLoopScroll);
+    };
+  }, [projects.length, isMobile]);
+
+  // PC: 무한 루핑을 위한 3번 반복, 모바일: 3번 반복 (가로 루핑)
+  const loopedProjects = Array.from({ length: loopCount }, (_, loopIndex) =>
+    projects.map((project, index) => ({ project, index, loopIndex }))
+  ).flat();
+
+  // 사이드바에서 휠 이벤트를 막아서 전체 페이지 휠 이벤트만 작동하도록 (PC와 모바일 모두)
   useEffect(() => {
     const sidebar = sidebarRef.current;
-    if (!sidebar) return;
+    const mobileSidebar = mobileSidebarRef.current;
 
     const handleSidebarWheel = (e: WheelEvent) => {
       // 사이드바의 기본 스크롤 방지 - 전체 페이지 휠 이벤트가 처리하도록
@@ -194,10 +243,20 @@ const ProjectSidebar = ({
       e.stopPropagation();
     };
 
-    sidebar.addEventListener('wheel', handleSidebarWheel, { passive: false, capture: true });
+    if (sidebar) {
+      sidebar.addEventListener('wheel', handleSidebarWheel, { passive: false, capture: true });
+    }
+    if (mobileSidebar) {
+      mobileSidebar.addEventListener('wheel', handleSidebarWheel, { passive: false, capture: true });
+    }
 
     return () => {
-      sidebar.removeEventListener('wheel', handleSidebarWheel, { capture: true } as EventListenerOptions);
+      if (sidebar) {
+        sidebar.removeEventListener('wheel', handleSidebarWheel, { capture: true } as EventListenerOptions);
+      }
+      if (mobileSidebar) {
+        mobileSidebar.removeEventListener('wheel', handleSidebarWheel, { capture: true } as EventListenerOptions);
+      }
     };
   }, []);
 
