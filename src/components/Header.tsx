@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { info } from '../data';
 
@@ -9,23 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, introDelayMs = 0 }) => {
-  const [currentTime, setCurrentTime] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const hoursNum = now.getHours();
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const ampm = hoursNum >= 12 ? 'PM' : 'AM';
-      const displayHours = hoursNum > 12 ? hoursNum - 12 : hoursNum === 0 ? 12 : hoursNum;
-      setCurrentTime(`${displayHours}:${minutes} ${ampm}`);
-    };
-    
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <motion.header
@@ -78,9 +62,13 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             </a>
           </div>
 
-          <div className="text-xs font-normal">
-            {currentTime}
-          </div>
+          <button
+            type="button"
+            className="text-[10px] md:text-xs font-normal text-right leading-snug hover:opacity-70 transition-opacity"
+            onClick={() => onSectionChange?.('contact')}
+          >
+            <span className="font-semibold">CONTACT</span>
+          </button>
 
           <button
             className="md:hidden"

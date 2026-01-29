@@ -8,6 +8,7 @@ export interface Project {
   link?: string;
   description?: string;
   participation?: number; // 참여도 (0-100)
+  keywords?: string[]; // 키워드 배열
 }
 
 export interface Info {
