@@ -15,6 +15,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
   const videoRef = useRef<HTMLVideoElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [videoOpacity, setVideoOpacity] = useState(1);
+  const [shouldFade, setShouldFade] = useState(false);
   const prevProjectIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
         video.pause();
         video.currentTime = 0;
         setVideoOpacity(1);
+        setShouldFade(false); // 처음 나타날 때는 페이드 없음
         video.load();
       }
       
@@ -40,6 +42,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
       // 비디오가 끝나기 전에 페이드아웃
       const handleTimeUpdate = () => {
         if (video.duration && video.currentTime >= video.duration - 0.5) {
+          setShouldFade(true); // 페이드 아웃 시작 시 transition 활성화
           const fadeProgress = (video.duration - video.currentTime) / 0.5;
           setVideoOpacity(Math.max(0, fadeProgress));
         }
@@ -116,6 +119,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
     }
     if (project?.video) {
       setVideoOpacity(1);
+      setShouldFade(false); // 새 프로젝트 시작 시 페이드 비활성화
     }
   }, [project?.id]);
 
@@ -150,7 +154,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
                 aspectRatio: 'auto',
                 display: 'block',
                 opacity: videoOpacity,
-                transition: 'opacity 0.3s ease-out',
+                transition: shouldFade ? 'opacity 0.3s ease-out' : 'none', // 페이드가 필요할 때만 transition 적용
                 maxWidth: '100%',
                 maxHeight: '100%',
                 width: 'auto',
@@ -160,6 +164,7 @@ const MainDisplay = ({ project, isVisible, isIntro = false, introDelayMs = 0, is
               playsInline
               onEnded={() => {
                 if (onVideoEnd && !isWheeling) {
+                  setShouldFade(true);
                   setVideoOpacity(0);
                   setTimeout(() => {
                     onVideoEnd();

@@ -53,7 +53,7 @@ const GeneralInfoPanel = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: isWheeling ? 0.3 : 1, y: 0 }}
       transition={{ duration: 0.3, delay: isIntro ? introDelayMs / 1000 : 0 }}
-      className={`fixed bg-white z-30 overflow-y-auto p-4 md:p-8
+      className={`fixed bg-white z-30 overflow-y-auto ${isMobile ? 'p-5' : 'p-6 md:p-8'}
                  ${isMobile 
                    ? 'left-0 right-0 w-full border-t border-gray-200' 
                    : 'md:top-16 md:left-auto md:right-0 md:w-96 md:border-l md:border-gray-200 md:h-[calc(100vh-4rem)]'
@@ -74,49 +74,47 @@ const GeneralInfoPanel = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className={`${isMobile ? 'text-2xl' : 'text-xl'} font-semibold ${isMobile ? 'mb-2' : 'mb-4'}`}>
+            <h2 className={`${isMobile ? 'text-3xl' : 'text-2xl'} font-bold ${isMobile ? 'mb-1.5' : 'mb-2'} leading-[1.2] tracking-tight`}>
               {activeProject.title}
             </h2>
             <p
               className={`${
-                isMobile ? 'text-sm font-medium' : 'text-xs font-light'
-              } text-gray-600 ${isMobile ? 'mb-2' : 'mb-4'}`}
+                isMobile ? 'text-sm font-medium' : 'text-xs font-medium'
+              } text-gray-500 uppercase tracking-wide ${isMobile ? 'mb-2' : 'mb-2.5'} leading-[1.3]`}
             >
               {activeProject.category}
             </p>
             
             {/* 소제목 (description의 첫 줄) */}
             {activeProject.description && (
-              <p className={`${isMobile ? 'text-base' : 'text-sm'} text-gray-800 font-normal ${isMobile ? 'mb-3' : 'mb-4'} leading-snug`}>
+              <p className={`${isMobile ? 'text-lg' : 'text-base'} text-gray-900 font-medium ${isMobile ? 'mb-2.5' : 'mb-3'} leading-[1.4]`}>
                 {activeProject.description.split('\n\n')[0].trim()}
               </p>
             )}
             
             {/* 참여도 막대그래프 */}
-            <div className={`${isMobile ? 'mb-3' : 'mb-4'}`}>
-              <p className={`${isMobile ? 'text-sm' : 'text-xs'} text-gray-700 font-medium mb-2`}>참여도</p>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-2 bg-gray-200 relative overflow-hidden">
-                  <motion.div
-                    className="h-full bg-black"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${activeProject.participation ?? 85}%` }}
-                    transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-                  />
-                </div>
-                <span className={`${isMobile ? 'text-sm' : 'text-xs'} text-gray-700 font-normal whitespace-nowrap`}>
-                  {activeProject.participation ?? 85}%
-                </span>
+            <div className={`${isMobile ? 'mb-2.5' : 'mb-3'}`}>
+              <div className="flex-1 h-6 bg-gray-200 relative overflow-hidden rounded-full">
+                <motion.div
+                  className="h-full bg-black/50 rounded-full relative flex items-center"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.max(30, activeProject.participation ?? 85)}%` }}
+                  transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+                >
+                  <span className={`${isMobile ? 'text-xs' : 'text-[11px]'} text-white/50 font-semibold pl-2 leading-none whitespace-nowrap`}>
+                    참여도 {activeProject.participation ?? 85}%
+                  </span>
+                </motion.div>
               </div>
             </div>
             
             {/* 키워드 라운드박스 */}
             {activeProject.keywords && activeProject.keywords.length > 0 && (
-              <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-6'}`}>
+              <div className={`flex flex-wrap ${isMobile ? 'gap-1.5 mb-3' : 'gap-2 mb-4'}`}>
                 {activeProject.keywords.map((keyword, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 text-xs font-normal text-gray-600 bg-gray-100 border border-gray-200 rounded-full"
+                    className={`${isMobile ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'} font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 transition-colors leading-tight whitespace-nowrap`}
                   >
                     {keyword}
                   </span>
@@ -126,22 +124,22 @@ const GeneralInfoPanel = ({
             
             {/* PC: 전체 설명 표시 (소제목 제외, 두 번째 문단부터) */}
             {!isMobile && (
-              <div className="space-y-4 text-sm font-light leading-relaxed">
+              <div className="space-y-3 text-sm font-normal leading-[1.5] text-gray-700">
                 {activeProject.description ? (
                   activeProject.description.split('\n\n').slice(1).map((paragraph, index) => (
                     paragraph.trim() && (
-                      <p key={index} className="text-gray-700">
+                      <p key={index} className="text-gray-700 leading-[1.5]">
                         {paragraph.trim()}
                       </p>
                     )
                   ))
                 ) : (
                   <>
-                    <p className="text-gray-700">
+                    <p className="text-gray-700 leading-[1.5]">
                       This project represents a comprehensive exploration of {activeProject.category.toLowerCase()}, combining innovative design principles with meticulous attention to detail. The work demonstrates a deep understanding of visual communication and user experience, creating a cohesive narrative that resonates with the target audience.
                     </p>
                     
-                    <p className="text-gray-700">
+                    <p className="text-gray-700 leading-[1.5]">
                       Through careful consideration of form, function, and aesthetic harmony, this project showcases the intersection of creative vision and technical excellence. Each element has been thoughtfully crafted to contribute to an overall experience that is both engaging and meaningful.
                     </p>
                   </>
