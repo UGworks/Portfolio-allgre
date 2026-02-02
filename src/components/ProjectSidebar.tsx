@@ -36,15 +36,13 @@ const ProjectSidebar = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 커스텀 easing 함수 (ease-in-out)
-  const easeInOut = (t: number): number => {
-    return t < 0.5 
-      ? 2 * t * t 
-      : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  // ease-in-out quint (더 강한 텐션감의 이지인 이지아웃)
+  const easeInOutQuint = (t: number): number => {
+    return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
   };
 
-  // 커스텀 스크롤 애니메이션 (ease-in-out, 빠르고 부드럽게)
-  const smoothScrollTo = (target: number, duration: number = 600) => {
+  // PC: 세로 스크롤 애니메이션 (이지인 이지아웃, 점프 거리에 따라 duration 조절)
+  const smoothScrollTo = (target: number, duration: number) => {
     const sidebar = sidebarRef.current;
     if (!sidebar) return;
 
@@ -55,12 +53,8 @@ const ProjectSidebar = ({
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
-      // ease-in-out
-      const eased = easeInOut(progress);
-      
+      const eased = easeInOutQuint(progress);
       sidebar.scrollTop = start + distance * eased;
-
       if (progress < 1) {
         animationFrameRef.current = requestAnimationFrame(animate);
       } else {
@@ -68,46 +62,67 @@ const ProjectSidebar = ({
       }
     };
 
-    // 기존 애니메이션 취소
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
-
     animationFrameRef.current = requestAnimationFrame(animate);
   };
 
-  // activeIndex가 변경될 때 해당 썸네일이 항상 중앙에 위치하도록 스크롤 (PC: 세로 스크롤)
+  // 모바일: 가로 스크롤 애니메이션 (동일 이지인 이지아웃)
+  const smoothScrollToHorizontal = (sidebar: HTMLElement, targetLeft: number, duration: number) => {
+    const start = sidebar.scrollLeft;
+    const distance = targetLeft - start;
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeInOutQuint(progress);
+      sidebar.scrollLeft = start + distance * eased;
+      if (progress < 1) {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      } else {
+        animationFrameRef.current = null;
+      }
+    };
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    animationFrameRef.current = requestAnimationFrame(animate);
+  };
+
+  // activeIndex가 변경될 때 해당 썸네일이 항상 중앙에 위치하도록 스크롤 (PC: 세로, 이지인 이지아웃 + 점프 거리에 따른 duration)
   useEffect(() => {
-    if (isMobile) return; // 모바일은 별도 처리
-    
+    if (isMobile) return;
+
     const activeItem = itemRefs.current[activeIndex];
     const sidebar = sidebarRef.current;
-    
+
     if (activeItem && sidebar && !isIntro) {
       const listHeight = sidebar.scrollHeight / loopCount;
       const itemHeight = activeItem.offsetHeight;
       const sidebarHeight = sidebar.clientHeight;
       const currentScrollTop = sidebar.scrollTop;
-      
-      // 중앙 루프에서의 타겟 스크롤 위치
+
       const targetInCenterLoop = activeItem.offsetTop - (sidebarHeight / 2) + (itemHeight / 2);
-      
-      // 현재 위치에서 가장 가까운 루프의 타겟 위치 계산
       let targetScroll = targetInCenterLoop;
       const distanceToCenter = Math.abs(currentScrollTop - targetInCenterLoop);
       const distanceToUpper = Math.abs(currentScrollTop - (targetInCenterLoop - listHeight));
       const distanceToLower = Math.abs(currentScrollTop - (targetInCenterLoop + listHeight));
-      
-      // 가장 가까운 루프 선택
+
       if (distanceToUpper < distanceToCenter && distanceToUpper < distanceToLower) {
         targetScroll = targetInCenterLoop - listHeight;
       } else if (distanceToLower < distanceToCenter && distanceToLower < distanceToUpper) {
         targetScroll = targetInCenterLoop + listHeight;
       }
-      
-      // 가장 가까운 경로로 스크롤
-      smoothScrollTo(targetScroll, 400);
-      
+
+      const prev = prevActiveIndexRef.current;
+      const rawJump = Math.abs(activeIndex - prev);
+      const jumpSize = Math.min(rawJump, projects.length - rawJump);
+      const duration = 320 + jumpSize * 100;
+
+      smoothScrollTo(targetScroll, duration);
       prevActiveIndexRef.current = activeIndex;
     }
 
@@ -118,44 +133,47 @@ const ProjectSidebar = ({
     };
   }, [activeIndex, isIntro, projects.length, isMobile]);
 
-  // 모바일: activeIndex가 변경될 때 가로 스크롤 중앙 정렬 (루핑 고려)
+  // 모바일: activeIndex가 변경될 때 가로 스크롤 중앙 정렬 (이지인 이지아웃, 점프 거리에 따른 duration)
   useEffect(() => {
     if (!isMobile) return;
-    
+
     const activeItem = mobileItemRefs.current[activeIndex];
     const sidebar = mobileSidebarRef.current;
-    
+
     if (activeItem && sidebar && !isIntro) {
-      // 약간의 딜레이를 주어 DOM 업데이트 후 스크롤
       const timeoutId = setTimeout(() => {
         const listWidth = sidebar.scrollWidth / loopCount;
         const itemWidth = activeItem.offsetWidth;
         const sidebarWidth = sidebar.clientWidth;
         const currentScrollLeft = sidebar.scrollLeft;
-        
-        // 중앙 루프에서의 타겟 스크롤 위치
+
         const targetInCenterLoop = activeItem.offsetLeft - (sidebarWidth / 2) + (itemWidth / 2);
-        
-        // 현재 위치에서 가장 가까운 루프의 타겟 위치 계산
         let targetScroll = targetInCenterLoop;
         const distanceToCenter = Math.abs(currentScrollLeft - targetInCenterLoop);
         const distanceToLeft = Math.abs(currentScrollLeft - (targetInCenterLoop - listWidth));
         const distanceToRight = Math.abs(currentScrollLeft - (targetInCenterLoop + listWidth));
-        
-        // 가장 가까운 루프 선택
+
         if (distanceToLeft < distanceToCenter && distanceToLeft < distanceToRight) {
           targetScroll = targetInCenterLoop - listWidth;
         } else if (distanceToRight < distanceToCenter && distanceToRight < distanceToLeft) {
           targetScroll = targetInCenterLoop + listWidth;
         }
-        
-        sidebar.scrollTo({
-          left: targetScroll,
-          behavior: 'smooth'
-        });
-      }, 100);
-      
-      return () => clearTimeout(timeoutId);
+
+        const prev = prevActiveIndexRef.current;
+        const rawJump = Math.abs(activeIndex - prev);
+        const jumpSize = Math.min(rawJump, projects.length - rawJump);
+        const duration = 320 + jumpSize * 100;
+
+        smoothScrollToHorizontal(sidebar, targetScroll, duration);
+        prevActiveIndexRef.current = activeIndex;
+      }, 80);
+
+      return () => {
+        clearTimeout(timeoutId);
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+      };
     }
   }, [activeIndex, isIntro, projects.length, isMobile, loopCount]);
 

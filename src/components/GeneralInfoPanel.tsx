@@ -7,14 +7,12 @@ interface GeneralInfoPanelProps {
   activeProject: Project | null;
   isIntro?: boolean;
   introDelayMs?: number;
-  isWheeling?: boolean;
 }
 
 const GeneralInfoPanel = ({
   activeProject,
   isIntro = false,
   introDelayMs = 0,
-  isWheeling = false,
 }: GeneralInfoPanelProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -51,7 +49,7 @@ const GeneralInfoPanel = ({
     <motion.div
       ref={panelRef}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: isWheeling ? 0.3 : 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: isIntro ? introDelayMs / 1000 : 0 }}
       className={`fixed bg-white z-30 overflow-y-auto ${isMobile ? 'p-5' : 'p-6 md:p-8'}
                  ${isMobile 

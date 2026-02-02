@@ -7,7 +7,6 @@ import MainDisplay from './MainDisplay';
 interface PortfolioLayoutProps {
   projects: Project[];
   onProjectChange?: (project: Project | null) => void;
-  onWheelingChange?: (isWheeling: boolean) => void;
   isIntro?: boolean;
   introMaskDelayMs?: number;
   introMaskDurationMs?: number;
@@ -17,24 +16,30 @@ interface PortfolioLayoutProps {
 const PortfolioLayout = ({
   projects,
   onProjectChange,
-  onWheelingChange,
   isIntro = false,
   introMaskDelayMs = 0,
   introMaskDurationMs = 2000,
   introSidebarDelayMs = 0,
 }: PortfolioLayoutProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isWheeling, setIsWheeling] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mainDisplayRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
-  const lastWheelTimeRef = useRef(0);
-  const wheelStopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const imageAutoTransitionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAutoTransitioningRef = useRef(false);
   const onProjectChangeRef = useRef(onProjectChange);
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+
+  // 스크롤 위치 동기화: 레이아웃 반영 후 실행해 리로드/깜빡임 방지
+  const syncScrollToIndex = (index: number) => {
+    requestAnimationFrame(() => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) return;
+      const target = (index / projects.length) * maxScroll;
+      window.scrollTo({ top: target, behavior: 'auto' });
+    });
+  };
 
   // 모바일 여부 확인
   useEffect(() => {
@@ -56,12 +61,6 @@ const PortfolioLayout = ({
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  // isWheeling 상태 변경 시 콜백 호출
-  useEffect(() => {
-    if (onWheelingChange) {
-      onWheelingChange(isWheeling);
-    }
-  }, [isWheeling, onWheelingChange]);
 
   // 이미지만 있는 프로젝트는 1.5초 후 자동으로 다음 프로젝트로 전환 (애니메이션 시간 고려)
   useEffect(() => {
@@ -92,9 +91,7 @@ const PortfolioLayout = ({
             onProjectChangeRef.current(projects[nextIndex]);
           }
           
-          // 스크롤 위치 업데이트
-          const scrollTo = (nextIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
-          window.scrollTo({ top: scrollTo, behavior: 'auto' });
+          syncScrollToIndex(nextIndex);
           
           // 자동 전환 플래그 해제
           isAutoTransitioningRef.current = false;
@@ -118,121 +115,53 @@ const PortfolioLayout = ({
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      // 기본 스크롤 동작 방지
       e.preventDefault();
-      e.stopPropagation();
-      
-      const now = Date.now();
       const delta = e.deltaY;
-      const absDelta = Math.abs(delta);
-      
-      // 휠 속도 계산 (가속 적용)
-      const timeDelta = now - lastWheelTimeRef.current;
-      const velocity = timeDelta > 0 && timeDelta < 100 ? absDelta / timeDelta : 0;
-      
-      // 휠 멈춤 타이머 리셋
-      if (wheelStopTimeoutRef.current) {
-        clearTimeout(wheelStopTimeoutRef.current);
+      const currentIndex = activeIndexRef.current;
+      const newIndex =
+        delta > 0
+          ? (currentIndex + 1) % projects.length
+          : (currentIndex - 1 + projects.length) % projects.length;
+
+      if (newIndex === currentIndex) return;
+
+      activeIndexRef.current = newIndex;
+      setActiveIndex(newIndex);
+      if (onProjectChangeRef.current) {
+        onProjectChangeRef.current(projects[newIndex]);
       }
-      
-      setIsWheeling(true);
-      wheelStopTimeoutRef.current = setTimeout(() => {
-        setIsWheeling(false);
-        wheelStopTimeoutRef.current = null;
-      }, 150);
-      
-      // 기존 이미지 자동 전환 타이머 취소
-      if (imageAutoTransitionRef.current) {
-        clearTimeout(imageAutoTransitionRef.current);
-        imageAutoTransitionRef.current = null;
-        isAutoTransitioningRef.current = false;
-      }
-      
-      // 휠 민감도
-      const threshold = 5;
-      
-      if (absDelta > threshold) {
-        lastWheelTimeRef.current = now;
-        
-        // 가속도에 따라 여러 단계 건너뛰기
-        const speedMultiplier = velocity > 10 ? Math.min(Math.floor(velocity / 5), 3) : 1;
-        const step = speedMultiplier;
-        
-        const currentIndex = activeIndexRef.current;
-        let newIndex: number;
-        
-        if (delta > 0) {
-          // 아래로 스크롤 - 다음 프로젝트 (순환)
-          newIndex = (currentIndex + step) % projects.length;
-        } else {
-          // 위로 스크롤 - 이전 프로젝트 (순환)
-          newIndex = (currentIndex - step + projects.length) % projects.length;
-        }
-        
-        // 즉시 전환
-        activeIndexRef.current = newIndex;
-        setActiveIndex(newIndex);
-        if (onProjectChangeRef.current) {
-          onProjectChangeRef.current(projects[newIndex]);
-        }
-        
-        // 스크롤 위치 동기화 (순환 고려)
-        const scrollTo = (newIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
-        window.scrollTo({ top: scrollTo, behavior: 'auto' });
-      }
+      syncScrollToIndex(newIndex);
     };
 
-    // 휠 이벤트 리스너 (PC와 모바일 모두)
     document.addEventListener('wheel', handleWheel, { passive: false, capture: true });
 
-    return () => {
-      document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
-      if (wheelStopTimeoutRef.current) {
-        clearTimeout(wheelStopTimeoutRef.current);
-      }
-    };
-  }, [projects.length, isMobile]);
+    return () => document.removeEventListener('wheel', handleWheel, { capture: true } as EventListenerOptions);
+  }, [projects.length]);
 
   const handleProjectClick = (index: number) => {
-    // 기존 이미지 자동 전환 타이머 취소
     if (imageAutoTransitionRef.current) {
       clearTimeout(imageAutoTransitionRef.current);
       imageAutoTransitionRef.current = null;
       isAutoTransitioningRef.current = false;
     }
-    
-    // 휠 상태 해제 (썸네일 클릭 시 비디오가 재생되도록)
-    setIsWheeling(false);
-    if (wheelStopTimeoutRef.current) {
-      clearTimeout(wheelStopTimeoutRef.current);
-      wheelStopTimeoutRef.current = null;
-    }
-    
     // 즉시 전환
     activeIndexRef.current = index;
     setActiveIndex(index);
     if (onProjectChangeRef.current) {
       onProjectChangeRef.current(projects[index]);
     }
-    
-    // 해당 프로젝트로 스크롤
-    const scrollTo = (index / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
-    window.scrollTo({ top: scrollTo, behavior: 'auto' });
+    syncScrollToIndex(index);
   };
 
   const handleVideoEnd = () => {
-    // 비디오가 끝나면 다음 프로젝트로 전환 (순환)
-    if (projects.length > 0 && !isWheeling) {
+    if (projects.length > 0) {
       const nextIndex = (activeIndexRef.current + 1) % projects.length;
       activeIndexRef.current = nextIndex;
       setActiveIndex(nextIndex);
       if (onProjectChangeRef.current) {
         onProjectChangeRef.current(projects[nextIndex]);
       }
-      
-      // 스크롤 위치 업데이트
-      const scrollTo = (nextIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
-      window.scrollTo({ top: scrollTo, behavior: 'auto' });
+      syncScrollToIndex(nextIndex);
     }
   };
 
@@ -300,9 +229,7 @@ const PortfolioLayout = ({
           onProjectChangeRef.current(projects[newIndex]);
         }
 
-        // 스크롤 위치 동기화
-        const scrollTo = (newIndex / projects.length) * (document.documentElement.scrollHeight - window.innerHeight);
-        window.scrollTo({ top: scrollTo, behavior: 'auto' });
+        syncScrollToIndex(newIndex);
       }
 
       touchStartRef.current = null;
@@ -319,32 +246,23 @@ const PortfolioLayout = ({
     };
   }, [projects.length, isMobile]);
 
-  // 초기 프로젝트 설정 및 인덱스 초기화
+  // 초기 프로젝트 설정 및 인덱스 초기화 (마운트 시 1회만, projects.length 변경 시에만 재실행)
   useEffect(() => {
     if (projects.length > 0) {
-      // 상태 초기화
       activeIndexRef.current = 0;
       setActiveIndex(0);
       isAutoTransitioningRef.current = false;
-      setIsWheeling(false);
-      
-      // 기존 타이머들 정리
       if (imageAutoTransitionRef.current) {
         clearTimeout(imageAutoTransitionRef.current);
         imageAutoTransitionRef.current = null;
       }
-      if (wheelStopTimeoutRef.current) {
-        clearTimeout(wheelStopTimeoutRef.current);
-        wheelStopTimeoutRef.current = null;
-      }
-      
-      // 프로젝트 변경 콜백
       if (onProjectChange) {
         onProjectChange(projects[0]);
       }
-      
-      // 스크롤 위치 초기화
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      // 레이아웃 반영 후 스크롤 초기화 (리로드처럼 보이는 현상 방지)
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projects.length]);
@@ -367,15 +285,14 @@ const PortfolioLayout = ({
         <motion.div
           ref={mainDisplayRef}
           className="fixed bg-black"
-          initial={isIntro ? { clipPath: 'inset(0 0 100% 0)', opacity: 0 } : false}
-          animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1 }}
+          initial={isIntro ? { clipPath: 'inset(0 0 100% 0)' } : false}
+          animate={{ clipPath: 'inset(0 0 0 0)' }}
           transition={
             isIntro
               ? { 
                   duration: introMaskDurationMs / 1000, 
                   ease: 'easeInOut', 
-                  delay: introMaskDelayMs / 1000,
-                  opacity: { duration: 1.2, ease: 'easeOut' }
+                  delay: introMaskDelayMs / 1000
                 }
               : { duration: 0 }
           }
@@ -399,8 +316,6 @@ const PortfolioLayout = ({
               project={projects[activeIndex]}
               isVisible={true}
               isIntro={isIntro}
-              introDelayMs={introMaskDelayMs}
-              isWheeling={isWheeling}
               onVideoEnd={handleVideoEnd}
             />
           )}

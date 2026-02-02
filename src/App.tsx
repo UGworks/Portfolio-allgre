@@ -12,7 +12,6 @@ function App() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
   const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
-  const [isWheeling, setIsWheeling] = useState(false);
   // 인증 후 오프닝 순서: 1) 콘텐츠 프레임 아래→위 마스킹 2) 썸네일 등장 3) 상세설명 등장 (PC·모바일 동일)
   const introHeaderDelayMs = 0;
   const introMaskDelayMs = 0;
@@ -22,19 +21,17 @@ function App() {
   const introContentDelayMs = introMaskDelayMs + introMaskDurationMs;
   const introTotalMs = introContentDelayMs + 500;
 
-  // 섹션이 변경될 때 인트로 상태 초기화
+  // 인증 후 works 진입 시에만 인트로 실행 (비번 화면에서는 타이머 미실행)
   useEffect(() => {
+    if (!isAuthenticated) return;
     if (activeSection === 'works') {
       setHasPlayedIntro(false);
-      const timer = setTimeout(() => {
-        setHasPlayedIntro(true);
-      }, introTotalMs);
+      const timer = setTimeout(() => setHasPlayedIntro(true), introTotalMs);
       return () => clearTimeout(timer);
     } else {
-      // 다른 섹션으로 갈 때는 즉시 인트로 완료 상태로
       setHasPlayedIntro(true);
     }
-  }, [activeSection, introTotalMs]);
+  }, [activeSection, introTotalMs, isAuthenticated]);
 
   // 우클릭(컨텍스트 메뉴) 방지
   useEffect(() => {
@@ -85,7 +82,6 @@ function App() {
           <PortfolioLayout 
             projects={projects} 
             onProjectChange={setActiveProject}
-            onWheelingChange={setIsWheeling}
             isIntro={!hasPlayedIntro}
             introMaskDelayMs={introMaskDelayMs}
             introMaskDurationMs={introMaskDurationMs}
@@ -95,7 +91,6 @@ function App() {
             activeProject={activeProject}
             isIntro={!hasPlayedIntro}
             introDelayMs={introInfoDelayMs}
-            isWheeling={isWheeling}
           />
         </>
       )}
