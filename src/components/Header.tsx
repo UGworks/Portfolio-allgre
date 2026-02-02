@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
       className="fixed top-0 left-0 right-0 z-[100] bg-white border-b border-gray-200"
     >
       <nav className="w-full mx-auto px-6 lg:px-8 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between relative">
           <motion.a
             href="#"
             className="text-base font-normal tracking-widest"
@@ -29,7 +29,13 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             {info.name}
           </motion.a>
           
-          <div className="hidden md:flex items-center gap-8">
+          {/* PC: 컨텐츠 프레임 기준 센터 (left: 20rem, right: 24rem 영역의 중앙) */}
+          <div 
+            className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2"
+            style={{
+              marginLeft: '-2rem' // (24rem - 20rem) / 2 = 2rem 왼쪽으로 조정하여 컨텐츠 프레임 중앙 정렬
+            }}
+          >
             <a 
               href="#works" 
               className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
@@ -40,16 +46,6 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             >
               작업물
             </a>
-            {/* <a 
-              href="#about" 
-              className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                onSectionChange?.('about');
-              }}
-            >
-              나에 대하여
-            </a> */}
             <a 
               href="#contact" 
               className="text-xs hover:opacity-70 transition-opacity cursor-pointer"
@@ -58,27 +54,19 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
                 onSectionChange?.('contact');
               }}
             >
-              연락주세요
+              CONTACT
             </a>
           </div>
 
           <button
-            type="button"
-            className="text-[10px] md:text-xs font-normal text-right leading-snug hover:opacity-70 transition-opacity"
-            onClick={() => onSectionChange?.('contact')}
-          >
-            <span className="font-semibold">CONTACT</span>
-          </button>
-
-          <button
-            className="md:hidden"
+            className="md:hidden relative w-8 h-8 flex items-center justify-center"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
-            <div className="w-6 h-5 flex flex-col justify-between">
-              <span className={`block h-0.5 w-full bg-black transition-all ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`block h-0.5 w-full bg-black transition-all ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`block h-0.5 w-full bg-black transition-all ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            <div className="w-6 h-6 relative">
+              <span className={`absolute top-1/2 left-0 w-full h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-2'}`} />
+              <span className={`absolute top-1/2 left-0 w-full h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`} />
+              <span className={`absolute top-1/2 left-0 w-full h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-2'}`} />
             </div>
           </button>
         </div>
@@ -100,17 +88,6 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
             >
               작업물
             </a>
-            {/* <a 
-              href="#about" 
-              className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
-              onClick={(e) => {
-                e.preventDefault();
-                setIsMenuOpen(false);
-                onSectionChange?.('about');
-              }}
-            >
-              나에 대하여
-            </a> */}
             <a 
               href="#contact" 
               className="block text-xs hover:opacity-70 transition-opacity cursor-pointer" 
@@ -120,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
                 onSectionChange?.('contact');
               }}
             >
-              연락주세요
+              CONTACT
             </a>
           </motion.div>
         )}
