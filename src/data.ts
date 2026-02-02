@@ -2,9 +2,9 @@ import { Project, Info } from './types';
 
 export const info: Info = {
   name: "Seonghun.Lee",
-  title: "Independent Designer and Creative Director",
+  title: "2D TD · 포스트프로덕션",
   description: "디자인 엔지니어에서 소프트웨어 엔지니어로 전환했습니다. 디자인 렌즈를 통해 엔지니어링에 접근하며, 기술적 아키텍처와 인간 경험 모두에 관심이 있습니다.",
-  location: "Based in [Your Location]",
+  location: "Seoul, Korea",
   email: "hello@yourname.com",
   clients: [
     "Client 1",

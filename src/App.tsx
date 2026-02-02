@@ -13,13 +13,14 @@ function App() {
   const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
   const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
   const [isWheeling, setIsWheeling] = useState(false);
+  // 인증 후 오프닝 순서: 1) 콘텐츠 프레임 아래→위 마스킹 2) 썸네일 등장 3) 상세설명 등장 (PC·모바일 동일)
   const introHeaderDelayMs = 0;
-  const introSidebarDelayMs = 600;
-  const introMaskDelayMs = 1200;
+  const introMaskDelayMs = 0;
   const introMaskDurationMs = 2000;
-  const introInfoDelayMs = introMaskDelayMs + introMaskDurationMs;
+  const introSidebarDelayMs = 800;
+  const introInfoDelayMs = introMaskDelayMs + introMaskDurationMs + 300;
   const introContentDelayMs = introMaskDelayMs + introMaskDurationMs;
-  const introTotalMs = introContentDelayMs + 400;
+  const introTotalMs = introContentDelayMs + 500;
 
   // 섹션이 변경될 때 인트로 상태 초기화
   useEffect(() => {
@@ -35,9 +36,41 @@ function App() {
     }
   }, [activeSection, introTotalMs]);
 
-  // 인증되지 않은 경우 비밀번호 입력 화면 표시
+  // 우클릭(컨텍스트 메뉴) 방지
+  useEffect(() => {
+    const preventContextMenu = (e: MouseEvent) => e.preventDefault();
+    document.addEventListener('contextmenu', preventContextMenu);
+    return () => document.removeEventListener('contextmenu', preventContextMenu);
+  }, []);
+
+  // 소스 보기·개발자 도구 단축키 방지 (F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+J)
+  useEffect(() => {
+    const preventDevShortcuts = (e: KeyboardEvent) => {
+      if (e.key === 'F12') {
+        e.preventDefault();
+        return;
+      }
+      if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+        return;
+      }
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) {
+        e.preventDefault();
+        return;
+      }
+    };
+    document.addEventListener('keydown', preventDevShortcuts);
+    return () => document.removeEventListener('keydown', preventDevShortcuts);
+  }, []);
+
+  // 인증되지 않은 경우 비밀번호 입력 화면 표시 (이때 프로젝트 소스 프리로드)
   if (!isAuthenticated) {
-    return <PasswordProtection onAuthenticated={() => setIsAuthenticated(true)} />;
+    return (
+      <PasswordProtection
+        onAuthenticated={() => setIsAuthenticated(true)}
+        projects={projects}
+      />
+    );
   }
 
   return (
@@ -55,6 +88,7 @@ function App() {
             onWheelingChange={setIsWheeling}
             isIntro={!hasPlayedIntro}
             introMaskDelayMs={introMaskDelayMs}
+            introMaskDurationMs={introMaskDurationMs}
             introSidebarDelayMs={introSidebarDelayMs}
           />
           <GeneralInfoPanel

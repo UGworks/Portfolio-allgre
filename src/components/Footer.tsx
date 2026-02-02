@@ -12,7 +12,7 @@ const Footer = () => {
           transition={{ duration: 0.6 }}
           className="text-center space-y-4"
         >
-          <p className="text-lg font-light">For inquiries:</p>
+          <p className="text-lg font-light">문의</p>
           <a
             href={`mailto:${info.email}`}
             className="text-xl hover:opacity-70 transition-opacity inline-block"

@@ -74,26 +74,26 @@ const GeneralInfoPanel = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className={`${isMobile ? 'text-3xl' : 'text-2xl'} font-bold ${isMobile ? 'mb-1.5' : 'mb-2'} leading-[1.2] tracking-tight`}>
+            <h2 className={`${isMobile ? 'text-2xl' : 'text-2xl'} font-bold ${isMobile ? 'mb-1' : 'mb-2'} leading-[1.15] tracking-tight`}>
               {activeProject.title}
             </h2>
             <p
               className={`${
-                isMobile ? 'text-sm font-medium' : 'text-xs font-medium'
-              } text-gray-500 uppercase tracking-wide ${isMobile ? 'mb-2' : 'mb-2.5'} leading-[1.3]`}
+                isMobile ? 'text-xs font-medium' : 'text-xs font-medium'
+              } text-gray-500 uppercase tracking-wide ${isMobile ? 'mb-1.5' : 'mb-2.5'} leading-[1.25]`}
             >
               {activeProject.category}
             </p>
             
             {/* 소제목 (description의 첫 줄) */}
             {activeProject.description && (
-              <p className={`${isMobile ? 'text-lg' : 'text-base'} text-gray-900 font-medium ${isMobile ? 'mb-2.5' : 'mb-3'} leading-[1.4]`}>
+              <p className={`${isMobile ? 'text-[15px]' : 'text-base'} text-gray-900 font-medium ${isMobile ? 'mb-2 leading-[1.3]' : 'mb-3 leading-[1.4]'}`}>
                 {activeProject.description.split('\n\n')[0].trim()}
               </p>
             )}
             
             {/* 참여도 막대그래프 */}
-            <div className={`${isMobile ? 'mb-2.5' : 'mb-3'}`}>
+            <div className={`${isMobile ? 'mb-2' : 'mb-3'}`}>
               <div className="flex-1 h-6 bg-gray-200 relative overflow-hidden rounded-full">
                 <motion.div
                   className="h-full bg-black/50 rounded-full relative flex items-center"
@@ -108,13 +108,13 @@ const GeneralInfoPanel = ({
               </div>
             </div>
             
-            {/* 키워드 라운드박스 */}
+            {/* 키워드(태그라인) 라운드박스 - 모바일: iPhone 14 Pro Max/Plus 등에서 가독·행간 개선 */}
             {activeProject.keywords && activeProject.keywords.length > 0 && (
-              <div className={`flex flex-wrap ${isMobile ? 'gap-1.5 mb-3' : 'gap-2 mb-4'}`}>
+              <div className={`flex flex-wrap items-center ${isMobile ? 'gap-1 mb-2.5' : 'gap-2 mb-4'}`}>
                 {activeProject.keywords.map((keyword, index) => (
                   <span
                     key={index}
-                    className={`${isMobile ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'} font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 transition-colors leading-tight whitespace-nowrap`}
+                    className={`${isMobile ? 'px-2 py-0.5 text-[10px] leading-none' : 'px-3 py-1.5 text-xs leading-tight'} font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 transition-colors whitespace-nowrap`}
                   >
                     {keyword}
                   </span>
@@ -155,7 +155,7 @@ const GeneralInfoPanel = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-xl font-medium mb-6">General Info</h2>
+            <h2 className="text-xl font-medium mb-6">소개</h2>
             
             <div className="space-y-6 text-sm font-light leading-relaxed">
               <p className="text-gray-700">
@@ -164,7 +164,7 @@ const GeneralInfoPanel = ({
               
               {info.clients.length > 0 && (
                 <div>
-                  <p className="mb-4 font-normal">Notable clients include:</p>
+                  <p className="mb-4 font-normal">주요 클라이언트</p>
                   <ul className="list-none space-y-2">
                     {info.clients.map((client, index) => (
                       <li key={index} className="text-gray-700">
@@ -176,7 +176,7 @@ const GeneralInfoPanel = ({
               )}
 
               <div className="pt-6 border-t border-gray-200">
-                <p className="mb-2 font-normal">For inquiries:</p>
+                <p className="mb-2 font-normal">문의</p>
                 <a
                   href={`mailto:${info.email}`}
                   className="text-base hover:opacity-70 transition-opacity"

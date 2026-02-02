@@ -1,16 +1,39 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Project } from '../types';
 
 const PASSWORD = '0515';
 
 interface PasswordProtectionProps {
   onAuthenticated: () => void;
+  projects?: Project[];
 }
 
-const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps) => {
+const PasswordProtection = ({ onAuthenticated, projects = [] }: PasswordProtectionProps) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
+
+  // 비밀번호 화면에서 모든 프로젝트 소스(영상·썸네일·이미지) 프리로드
+  useEffect(() => {
+    if (projects.length === 0) return;
+    projects.forEach((project) => {
+      if (project.thumbnail) {
+        const img = new Image();
+        img.src = project.thumbnail;
+      }
+      if (project.image) {
+        const img = new Image();
+        img.src = project.image;
+      }
+      if (project.video) {
+        const video = document.createElement('video');
+        video.preload = 'auto';
+        video.src = project.video;
+        video.load();
+      }
+    });
+  }, [projects]);
 
   // 로컬 스토리지에서 인증 상태 확인
   useEffect(() => {

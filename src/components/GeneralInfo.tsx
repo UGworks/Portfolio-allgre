@@ -12,7 +12,7 @@ const GeneralInfo = () => {
           transition={{ duration: 0.6 }}
           className="text-2xl font-medium mb-12"
         >
-          General Info
+          소개
         </motion.h2>
 
         <motion.div
@@ -28,7 +28,7 @@ const GeneralInfo = () => {
           
           {info.clients.length > 0 && (
             <div>
-              <p className="mb-4">Notable clients include:</p>
+              <p className="mb-4">주요 클라이언트</p>
               <ul className="list-none space-y-2">
                 {info.clients.map((client, index) => (
                   <li key={index} className="text-gray-700">

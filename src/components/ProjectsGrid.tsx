@@ -16,7 +16,7 @@ const ProjectsGrid = ({ projects }: ProjectsGridProps) => {
           transition={{ duration: 0.6 }}
           className="text-2xl font-medium mb-12 text-center md:text-left"
         >
-          Selected Works
+          프로젝트
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">

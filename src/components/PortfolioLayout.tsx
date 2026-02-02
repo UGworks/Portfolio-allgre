@@ -10,6 +10,7 @@ interface PortfolioLayoutProps {
   onWheelingChange?: (isWheeling: boolean) => void;
   isIntro?: boolean;
   introMaskDelayMs?: number;
+  introMaskDurationMs?: number;
   introSidebarDelayMs?: number;
 }
 
@@ -19,6 +20,7 @@ const PortfolioLayout = ({
   onWheelingChange,
   isIntro = false,
   introMaskDelayMs = 0,
+  introMaskDurationMs = 2000,
   introSidebarDelayMs = 0,
 }: PortfolioLayoutProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -152,7 +154,7 @@ const PortfolioLayout = ({
       if (absDelta > threshold) {
         lastWheelTimeRef.current = now;
         
-        // 가속도에 따라 여러 단계 건너뛰기 (brunoarizio.com 스타일)
+        // 가속도에 따라 여러 단계 건너뛰기
         const speedMultiplier = velocity > 10 ? Math.min(Math.floor(velocity / 5), 3) : 1;
         const step = speedMultiplier;
         
@@ -361,25 +363,26 @@ const PortfolioLayout = ({
       {/* 모바일: 메인 컨텐츠 영역, PC: 오른쪽 메인 영역 */}
       <div className="md:ml-80 min-h-screen relative">
         {/* 모바일: 썸네일 아래 1:1 비율 영상 영역, PC: 오른쪽 하단 메인 디스플레이 영역 (검은색 배경) */}
+        {/* 콘텐츠 프레임: 인증 후 오프닝 시 아래에서 위로 올라오는 마스킹 (PC·모바일 동일) */}
         <motion.div
           ref={mainDisplayRef}
           className="fixed bg-black"
-          initial={isIntro ? { clipPath: 'inset(100% 0 0 0)', opacity: 0 } : false}
+          initial={isIntro ? { clipPath: 'inset(0 0 100% 0)', opacity: 0 } : false}
           animate={{ clipPath: 'inset(0 0 0 0)', opacity: 1 }}
           transition={
             isIntro
               ? { 
-                  duration: 2, 
+                  duration: introMaskDurationMs / 1000, 
                   ease: 'easeInOut', 
                   delay: introMaskDelayMs / 1000,
-                  opacity: { duration: 1.5, ease: 'easeOut' }
+                  opacity: { duration: 1.2, ease: 'easeOut' }
                 }
               : { duration: 0 }
           }
           style={{ 
             // PC: 원래 스타일
             left: isMobile ? 0 : '20rem', // 사이드바 너비 (80 = 20rem)
-            right: isMobile ? 0 : '24rem', // General Info Panel 너비 (96 = 24rem)
+            right: isMobile ? 0 : '24rem', // 소개 패널 너비 (96 = 24rem)
             // 모바일: 썸네일 아래에서 시작하는 1:1 비율 프레임 (썸네일 영역 제외)
             // 헤더(4rem=64px) + 썸네일(h-20=20px) + 80px = 164px 아래에서 시작
             top: isMobile ? 'calc(4rem + 20px + 80px)' : '4rem', // 모바일: 헤더(64px) + 썸네일(20px) + 80px = 164px
