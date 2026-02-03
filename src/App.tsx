@@ -97,7 +97,7 @@ function App() {
       {activeSection === 'about' && <AboutPage />}
       {activeSection === 'contact' && (
         <div className="fixed top-16 right-0 w-96 h-[calc(100vh-4rem)] overflow-y-auto bg-white z-40 border-l border-gray-200 p-8">
-          <h1 className="text-3xl font-bold mb-4">연락주세요</h1>
+          <h1 className="text-3xl font-bold mb-4">이성훈</h1>
           <p className="text-sm font-light mb-6 text-gray-600">Get in touch</p>
 
           <div className="space-y-4 text-sm font-normal text-gray-800">
@@ -117,8 +117,8 @@ function App() {
             </div>
 
             <div>
-              <p className="text-xs text-gray-500 mb-1">NAME</p>
-              <p className="text-base">이성훈</p>
+              <p className="text-xs text-gray-500 mb-1">거주지</p>
+              <p className="text-base">서울시 동작구</p>
             </div>
           </div>
         </div>

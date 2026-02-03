@@ -22,9 +22,13 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
         <div className="flex items-center justify-between relative">
           <motion.a
             href="#"
-            className="text-base font-normal tracking-widest"
+            className="text-base font-normal tracking-widest cursor-pointer"
             whileHover={{ opacity: 0.7 }}
             style={{ letterSpacing: '0.3em' }}
+            onClick={(e) => {
+              e.preventDefault();
+              onSectionChange?.('works');
+            }}
           >
             {info.name}
           </motion.a>
@@ -44,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
                 onSectionChange?.('works');
               }}
             >
-              작업물
+              PORTFOLIO
             </a>
             <a 
               href="#contact" 
@@ -86,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({ onSectionChange, isIntro = false, intro
                 onSectionChange?.('works');
               }}
             >
-              작업물
+              PORTFOLIO
             </a>
             <a 
               href="#contact" 
