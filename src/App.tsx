@@ -98,22 +98,21 @@ function App() {
       {activeSection === 'contact' && (
         <div className="fixed top-16 right-0 w-96 h-[calc(100vh-4rem)] overflow-y-auto bg-white z-40 border-l border-gray-200 p-8">
           <h1 className="text-3xl font-bold mb-4">이성훈</h1>
-          <p className="text-sm font-light mb-6 text-gray-600">Get in touch</p>
 
           <div className="space-y-4 text-sm font-normal text-gray-800">
             <div>
-              <p className="text-xs text-gray-500 mb-1">E-MAIL</p>
+              <p className="text-xs text-gray-500 mb-1">연락처</p>
+              <p className="text-base">010-3890-7954</p>
+            </div>
+
+            <div>
+              <p className="text-xs text-gray-500 mb-1">이메일</p>
               <a
                 href="mailto:huuuuun@kakao.com"
                 className="text-base hover:opacity-70 transition-opacity"
               >
                 huuuuun@kakao.com
               </a>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500 mb-1">MOBILE</p>
-              <p className="text-base">010-3890-7954</p>
             </div>
 
             <div>

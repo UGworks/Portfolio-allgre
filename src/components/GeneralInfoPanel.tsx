@@ -112,7 +112,7 @@ const GeneralInfoPanel = ({
                 {activeProject.keywords.map((keyword, index) => (
                   <span
                     key={index}
-                    className={`${isMobile ? 'px-2 py-0.5 text-[10px] leading-none' : 'px-3 py-1.5 text-xs leading-tight'} font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 transition-colors whitespace-nowrap`}
+                    className={`${isMobile ? 'px-2 py-0.5 text-[10px] leading-none' : 'px-3 py-1.5 text-xs leading-tight'} font-medium text-gray-700 bg-transparent border border-gray-300 rounded-full hover:bg-transparent transition-colors whitespace-nowrap`}
                   >
                     {keyword}
                   </span>

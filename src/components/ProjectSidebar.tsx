@@ -293,7 +293,7 @@ const ProjectSidebar = ({
           }
         }}
         onClick={() => onProjectClick(index)}
-        className="cursor-pointer group flex items-start gap-3 flex-shrink-0"
+        className="cursor-pointer group flex items-center gap-3 flex-shrink-0"
       >
         {/* 정방형 썸네일 */}
         <motion.div 
@@ -355,7 +355,7 @@ const ProjectSidebar = ({
                   duration: 0.3, 
                   ease: 'easeInOut' 
                 }}
-                className="flex-1 min-w-0 pt-1"
+                className="flex-1 min-w-0"
               >
                 <h3 className="text-xs font-normal mb-0.5 leading-tight">{project.title}</h3>
                 <p className="text-[10px] text-gray-500 font-light leading-tight">{project.category}</p>
