@@ -176,6 +176,7 @@ import thumbKGM_MV_1 from './IMG/KGM_MV_1.webm_20260121_231306.273.webp';
 import thumbKGM_MV from './IMG/KGM_MV.webm_20260121_231252.617.webp';
 import thumbkim_johan from './IMG/kim johan.webm_20260121_231318.785.webp';
 import thumbLG_COM from './IMG/LG .COM.png';
+import thumbLG_SNS from './IMG/LG_SNS.webp';
 import thumbLibratum_A from './IMG/Libratum_A.webm_20260121_231336.216.webp';
 import thumbLibratum_Web from './IMG/Libratum Web.png';
 import thumbLONG_CLEAN from './IMG/LONG_CLEAN_1920x1080.webm_20260121_231340.921.webp';
@@ -460,10 +461,12 @@ export const projects: Project[] = [
   },
   {
     id: "34",
-    title: "LG",
-    category: "TVCF",
+    title: "LG IG 운영",
+    category: "인스타그램 운영",
     video: videoLG,
-    description: "LG 브랜드 캠페인\n\nLG 전자 브랜드 TVCF. 글로벌 기술 기업으로서의 혁신성과 제품 가치를 시각적으로 전달하며, 'Life's Good' 브랜드 톤 유지가 요구된 프로젝트입니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 수행했습니다. 기술·제품 카테고리에 맞는 비주얼 완성도를 확보했습니다.",
+    thumbnail: thumbLG_SNS,
+    description: "LG전자 H&A 채널 인스타그램 운영\n\nLG전자 H&A(Home Appliance) 채널 인스타그램 운영에 필요한 콘텐츠 제작 프로젝트. 브랜드 톤에 맞는 시각 콘텐츠와 SNS 채널 특성에 맞는 완성도가 요구되었습니다.\n\n웹에이전시 영상팀장으로 참여해 콘텐츠 제작을 지원했습니다. 합성·3D compositing을 활용한 비주얼 제작과 SNS 채널 운영에 필요한 영상·이미지 자산을 담당했습니다.",
+    keywords: ["LG전자", "인스타그램", "SNS 채널 운영", "3D compositing", "합성", "웹에이전시", "영상팀장", "H&A", "콘텐츠 제작"],
   },
   {
     id: "34-1",
@@ -554,11 +557,13 @@ export const projects: Project[] = [
   },
   {
     id: "43",
-    title: "OFFICE 30",
+    title: "고려은단",
     category: "TVCF",
     video: videoOFFICE_30,
     thumbnail: thumbOFFICE_30,
-    description: "오피스 30초 광고 캠페인\n\n오피스·사무 관련 브랜드 30초 TVCF. 30초 러닝 타임 안에 브랜드 메시지와 제품·서비스 특징을 전달하며, B2B·오피스 타겟에 맞는 톤이 요구되었습니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 담당했습니다. 무결점 화면과 메시지 전달력으로 완성도를 맞췄습니다.",
+    participation: 90,
+    description: "비타민C 1000 유재석 편\n\n고려은단 비타민C 1000 TVCF. 유재석 출연으로 브랜드 신뢰도와 제품 메시지를 전달하는 30초 광고입니다.\n\n2D TD로 프로젝트를 진행했습니다. 합성·제품 패키지 디자인, 자막 애니메이션을 담당해 브랜드 톤과 시각적 완성도를 맞췄습니다.",
+    keywords: ["고려은단", "비타민C 1000", "유재석", "TVCF", "2D TD", "합성", "제품 패키지 디자인", "자막 애니메이션"],
   },
   {
     id: "44",
@@ -582,9 +587,9 @@ export const projects: Project[] = [
     category: "TVCF",
     video: videoPIZZAHUT_SOJAE,
     thumbnail: thumbPIZZAHUT_SOJAE,
-    participation: 75,
-    keywords: ["피자헛", "갈릭버터쉬림프", "자막 레이아웃", "촬영본 클린", "VFX", "시즐컷 합성", "자막 애니메이션", "매트페인팅", "2D TD", "식품광고"],
-    description: "갈릭버터쉬림프\n\n피자헛 프리미엄 새우 메뉴 '갈릭버터쉬림프' 광고. 더블 쉬림프 크런치·리조또 등 사용, 신선함·고소한 맛·시즐링 효과 시각화.\n\n2D TD로 참여. 자막 레이아웃·자막 애니메이션, 촬영본 클린, 시즐컷 합성(갈릭버터 끓는 장면·새우 클로즈업), VFX·매트페인팅으로 프리미엄 완성도 확보.",
+    participation: 85,
+    description: "갈릭마블 스테이크 맥콘티 편\n\n피자헛 프리미엄 메뉴 '갈릭마블 스테이크' TVCF 맥콘티 편. 스테이크를 통째로 올린 프리미엄 피자 라인을 풀 버전 러닝 타임으로 시각화하며, 푸드 광고 특유의 식욕 자극과 브랜드 톤 유지가 목표였습니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 담당했습니다. 장편 구성에 맞는 비주얼 완성도와 푸드 비주얼로 브랜드 톤을 유지했습니다.",
+    keywords: ["피자헛", "Pizza Hut", "갈릭마블 스테이크", "맥콘티", "TVCF", "매트 페인팅", "클린업", "실사·그래픽 합성", "식품광고", "푸드 비주얼", "프리미엄 피자"],
   },
   {
     id: "47",
