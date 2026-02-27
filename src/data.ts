@@ -78,7 +78,8 @@ export const info: Info = {
   socials: {
     twitter: "https://twitter.com",
     github: "https://github.com",
-    linkedin: "https://linkedin.com"
+    linkedin: "https://www.linkedin.com/in/seonghun-lee-27637a286/?isSelfProfile=true",
+    website: "https://star.tvcf.co.kr/HUUUUU.N/shots"
   }
 };
 

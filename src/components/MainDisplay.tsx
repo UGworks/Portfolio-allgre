@@ -83,12 +83,12 @@ const MainDisplay = ({ project, isVisible, isIntro = false, onVideoEnd }: MainDi
         <motion.div 
           key={project.id}
           className="w-full h-full flex items-center justify-center"
-          initial={isIntro ? { scale: 1.3, opacity: 1 } : { opacity: 0 }}
-          animate={isIntro ? { scale: 1, opacity: 1 } : { opacity: 1 }}
+          initial={isIntro ? { scale: 1.3, opacity: 1 } : { opacity: 1 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={ 
             isIntro 
               ? { duration: 2, ease: 'easeOut', delay: 0 } 
-              : { duration: 0.4, ease: 'easeOut' }
+              : { duration: 0 }
           }
         >
           {project.video ? (

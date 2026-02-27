@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from './components/Header';
 import PortfolioLayout from './components/PortfolioLayout';
 import GeneralInfoPanel from './components/GeneralInfoPanel';
 import AboutPage from './components/AboutPage';
+import ContactPage from './components/ContactPage';
 import PasswordProtection from './components/PasswordProtection';
 import { projects } from './data';
 import { Project } from './types';
+import { getSchoolCopy, getPasswordPageCopy } from './schoolCopy';
 
 function App() {
+  const { school } = useParams<{ school: string }>();
+  const schoolCopyData = getSchoolCopy(school);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
@@ -66,6 +71,7 @@ function App() {
       <PasswordProtection
         onAuthenticated={() => setIsAuthenticated(true)}
         projects={projects}
+        passwordPageCopy={getPasswordPageCopy(school)}
       />
     );
   }
@@ -77,6 +83,14 @@ function App() {
         isIntro={!hasPlayedIntro}
         introDelayMs={introHeaderDelayMs}
       />
+      {schoolCopyData && (
+        <div className="bg-gray-50 border-b border-gray-200 py-3 px-6 text-center">
+          <p className="text-sm font-medium text-gray-800">{schoolCopyData.headline}</p>
+          {schoolCopyData.subline && (
+            <p className="text-xs text-gray-500 mt-0.5">{schoolCopyData.subline}</p>
+          )}
+        </div>
+      )}
       {activeSection === 'works' && (
         <>
           <PortfolioLayout 
@@ -95,33 +109,7 @@ function App() {
         </>
       )}
       {activeSection === 'about' && <AboutPage />}
-      {activeSection === 'contact' && (
-        <div className="fixed top-16 right-0 w-96 h-[calc(100vh-4rem)] overflow-y-auto bg-white z-40 border-l border-gray-200 p-8">
-          <h1 className="text-3xl font-bold mb-4">이성훈</h1>
-
-          <div className="space-y-4 text-sm font-normal text-gray-800">
-            <div>
-              <p className="text-xs text-gray-500 mb-1">연락처</p>
-              <p className="text-base">010-3890-7954</p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500 mb-1">이메일</p>
-              <a
-                href="mailto:huuuuun@kakao.com"
-                className="text-base hover:opacity-70 transition-opacity"
-              >
-                huuuuun@kakao.com
-              </a>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500 mb-1">거주지</p>
-              <p className="text-base">서울시 동작구</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {activeSection === 'contact' && <ContactPage />}
     </div>
   );
 }

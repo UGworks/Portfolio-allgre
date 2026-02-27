@@ -37,6 +37,7 @@ export interface Info {
     twitter?: string;
     github?: string;
     linkedin?: string;
+    website?: string;
   };
 }
 

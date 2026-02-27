@@ -1,15 +1,27 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Project } from '../types';
+import type { PasswordPageCopy } from '../schoolCopy';
 
 const PASSWORD = '0515';
 
-interface PasswordProtectionProps {
+const defaultCopy: PasswordPageCopy = {
+  title: 'PORTFOLIO',
+  instruction: '비밀번호를 입력하세요',
+  placeholder: '비밀번호',
+  buttonConfirm: '확인',
+  buttonChecking: '확인 중...',
+  errorMessage: '비밀번호가 올바르지 않습니다',
+};
+
+export interface PasswordProtectionProps {
   onAuthenticated: () => void;
   projects?: Project[];
+  passwordPageCopy?: PasswordPageCopy;
 }
 
-const PasswordProtection = ({ onAuthenticated, projects = [] }: PasswordProtectionProps) => {
+const PasswordProtection = ({ onAuthenticated, projects = [], passwordPageCopy }: PasswordProtectionProps) => {
+  const copy = passwordPageCopy ?? defaultCopy;
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
@@ -77,9 +89,9 @@ const PasswordProtection = ({ onAuthenticated, projects = [] }: PasswordProtecti
       >
         <div className="text-center mb-8">
           <h1 className="text-2xl font-normal mb-2 tracking-widest" style={{ letterSpacing: '0.3em' }}>
-            PORTFOLIO
+            {copy.title}
           </h1>
-          <p className="text-sm text-gray-500 font-light">비밀번호를 입력하세요</p>
+          <p className="text-sm text-gray-500 font-light">{copy.instruction}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -92,7 +104,7 @@ const PasswordProtection = ({ onAuthenticated, projects = [] }: PasswordProtecti
                 setError(false);
               }}
               onKeyPress={handleKeyPress}
-              placeholder="비밀번호"
+              placeholder={copy.placeholder}
               className="w-full px-4 py-3 text-center text-lg border border-gray-300 focus:outline-none focus:border-black transition-colors"
               autoFocus
               disabled={isChecking}
@@ -103,7 +115,7 @@ const PasswordProtection = ({ onAuthenticated, projects = [] }: PasswordProtecti
                 animate={{ opacity: 1, y: 0 }}
                 className="text-xs text-red-500 mt-2 text-center"
               >
-                비밀번호가 올바르지 않습니다
+                {copy.errorMessage}
               </motion.p>
             )}
           </div>
@@ -113,7 +125,7 @@ const PasswordProtection = ({ onAuthenticated, projects = [] }: PasswordProtecti
             disabled={isChecking || !password}
             className="w-full py-3 bg-black text-white text-sm font-normal hover:opacity-70 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isChecking ? '확인 중...' : '확인'}
+            {isChecking ? (copy.buttonChecking ?? '확인 중...') : copy.buttonConfirm}
           </button>
         </form>
       </motion.div>

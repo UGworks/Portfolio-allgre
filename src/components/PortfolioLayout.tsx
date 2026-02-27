@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Project } from '../types';
 import ProjectSidebar from './ProjectSidebar';
 import MainDisplay from './MainDisplay';
@@ -311,14 +311,25 @@ const PortfolioLayout = ({
             clipPath: 'inset(0 0 0 0)'
           }}
         >
-          {projects[activeIndex] && (
-            <MainDisplay
-              project={projects[activeIndex]}
-              isVisible={true}
-              isIntro={isIntro}
-              onVideoEnd={handleVideoEnd}
-            />
-          )}
+          <AnimatePresence mode="wait">
+            {projects[activeIndex] && (
+              <motion.div
+                key={projects[activeIndex].id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <MainDisplay
+                  project={projects[activeIndex]}
+                  isVisible={true}
+                  isIntro={isIntro}
+                  onVideoEnd={handleVideoEnd}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* 스크롤을 위한 더미 컨텐츠 - 각 프로젝트마다 화면 높이만큼 공간 확보 */}
