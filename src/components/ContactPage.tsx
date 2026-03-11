@@ -231,6 +231,8 @@ const ContactPage = ({ maxExperienceItems, experienceStartIndex = 0 }: ContactPa
                   <span>vMix, Tricaster, OBS를 통한 라이브 송출 경험</span>
                   <strong className="text-gray-900">AI 파이프라인</strong>
                   <span>AI 기반 영상 디자인 파이프라인 개발</span>
+                  <strong className="text-gray-900">Vibe Coding</strong>
+                  <span>Cursor, Claude Code를 통한 웹 및 다양한 HTML 디자인 포맷 제작</span>
                 </div>
               </section>
 
