@@ -118,8 +118,6 @@ import videoLibratum_A from './video/Libratum_A.webm';
 import videoLibratum_Web from './video/Libratum Web.webm';
 import videoLONG_CLEAN from './video/LONG_CLEAN_1920x1080.webm';
 import videoLOOKAS from './video/LOOKAS.webm';
-import videoMAIN_2997 from './video/MAIN_2997_수정.webm';
-import videoMAIN from './video/MAIN.webm';
 import videoMANGO from './video/MANGO.webm';
 import videoMILLET_30 from './video/MILLET_30.webm';
 import videoNEXEN_A from './video/NEXEN_A.webm';
@@ -182,8 +180,6 @@ import thumbLibratum_A from './IMG/Libratum_A.webm_20260121_231336.216.webp';
 import thumbLibratum_Web from './IMG/Libratum Web.png';
 import thumbLONG_CLEAN from './IMG/LONG_CLEAN_1920x1080.webm_20260121_231340.921.webp';
 import thumbLOOKAS from './IMG/LOOKAS.webm_20260121_231345.040.webp';
-import thumbMAIN_2997 from './IMG/MAIN_2997_수정.webm_20260121_231405.560.webp';
-import thumbMAIN from './IMG/MAIN.webm_20260121_231353.752.webp';
 import thumbMANGO from './IMG/MANGO.webm_20260121_231411.056.webp';
 import thumbMILLET_30 from './IMG/MILLET_30.webm_20260121_231415.945.webp';
 import thumbNEXEN_A from './IMG/NEXEN_A.webm_20260121_231428.888.webp';
@@ -258,7 +254,7 @@ export const projects: Project[] = [
     thumbnail: thumb1002,
     participation: 85,
     description: "Online IR Event\n\nKRAFTON 온라인 실적발표 이벤트. 게임 업계의 성장과 혁신을 시각화하고, 브랜드 아이덴티티를 강조하는 IR(Investor Relations) 경험을 구축하는 프로젝트입니다.\n\nCreative Director로 참여해 랜딩페이지 디자인과 현장 감독을 담당했으며, 실적발표 이벤트 전반의 퀄리티와 IR 경험 품질을 확보했습니다.",
-    keywords: ["KRAFTON", "IR EVENT", "실적발표", "온라인 이벤트", "Creative Director", "랜딩페이지 디자인", "현장 감독", "브랜드 아이덴티티", "게임 업계", "IR"],
+    keywords: ["KRAFTON", "IR EVENT", "실적발표", "온라인 이벤트", "Creative Director", "랜딩페이지 디자인", "현장 감독", "브랜드 아이덴티티", "IR"],
   },
   {
     id: "6",
@@ -405,11 +401,12 @@ export const projects: Project[] = [
   },
   {
     id: "26",
-    title: "GROUP FULL A",
+    title: "피자헛",
     category: "TVCF",
     video: videoGROUP_FULL_A,
     thumbnail: thumbGROUP_FULL_A,
-    description: "그룹 풀 버전 광고 A\n\n그룹 브랜드 풀 버전 TVCF. 브랜드 가치와 제품·서비스의 혁신 포인트를 풀 버전 러닝 타임으로 시각화하며, 스토리와 비주얼 일관성이 요구된 프로젝트입니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 담당했습니다. 장편 구성에 맞는 비주얼 완성도와 브랜드 톤을 유지했습니다.",
+    description: "맥콘티 편\n\n피자헛 그룹 브랜드 풀 버전 TVCF. 2018년 광고 모델 래퍼 마이크로닷의 사회적 논란(부모 사기 의혹)으로 온에어 직전 모델 촬영분 전면 교체가 불가피해졌고, 해당 구간을 광고 콘셉트 아트와 콘티(스토리보드)로 재편집한 작품입니다. 위기 대응형 재편집으로 화제가 되었으며, 브랜드 풀 버전의 스토리와 비주얼 일관성 유지가 요구된 프로젝트입니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 담당했습니다. 모델 분량이 콘티·컨셉 아트로 대체된 구간의 비주얼 완성도와 브랜드 톤을 맞추는 작업을 수행했습니다.",
+    keywords: ["피자헛", "맥콘티 편", "마이크로닷", "모델 이슈", "콘티 대체", "재편집", "TVCF", "매트 페인팅", "클린업", "실사·그래픽 합성", "컨셉 아트", "위기 대응 광고"],
   },
   {
     id: "28",
@@ -429,11 +426,12 @@ export const projects: Project[] = [
   },
   {
     id: "30",
-    title: "KELLOG",
+    title: "KELLOGG",
     category: "TVCF",
     video: videoKELLOG,
     thumbnail: thumbKELLOG,
-    description: "켈로그 브랜드 캠페인\n\n글로벌 시리얼 브랜드 켈로그(Kellogg) 한국 시장용 TVCF. 통곡물·영양 가치와 제품 라인(시리얼, 그래놀라 등)의 신뢰성을 시각적으로 전달하는 것이 목표였습니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 수행했습니다. 식품 광고에 맞는 밝고 신선한 톤을 유지하며 무결점 화면으로 완성도를 확보했습니다.",
+    description: "초코 크런치 차운우 편\n\n농심켈로그(Kellogg) 초코 시리얼 TVCF. 허쉬 초코 크런치 등 한국 시장 초코 크런치 라인의 제품 가치와 식감·맛을 시각적으로 전달하는 식품 광고로, 푸드 비주얼과 모델 연출의 완성도가 요구되었습니다.\n\n2D Artist로 참여해 제품 리터칭, 모델 2D 스킨 작업, 매트 페인팅·클린업, 타이포그래피 및 실사·그래픽 합성을 담당했습니다. 식품 광고에 맞는 밝고 신선한 톤과 무결점 화면을 유지했습니다.",
+    keywords: ["켈로그", "Kellogg", "농심켈로그", "초코 크런치", "차운우 편", "TVCF", "제품 리터칭", "2D 스킨", "매트 페인팅", "타이포그래피", "식품광고", "푸드 비주얼"],
   },
   {
     id: "31",
@@ -459,10 +457,11 @@ export const projects: Project[] = [
     video: videokim_johan,
     thumbnail: thumbkim_johan,
     description: "알아 알아 앓아 \n\n김조한 정규 6집 수록곡 '알아 알아 앓아' 뮤직비디오. 슬로 알앤비·호소력 보컬, 서정적 무드 시각화, 애절한 감정선·서사적 깊이.\n\n2D TD로 참여. 컴포지팅·매트 페인팅 총괄. 실사·디지털 요소 조화로 공간 입체감 재구성, 가사 정서 자막 애니메이션 제작.",
+    keywords: ["김조한", "알아 알아 앓아", "뮤직비디오", "M/V", "정규 6집", "2D TD", "컴포지팅", "매트 페인팅", "실사·디지털 합성", "자막 애니메이션", "슬로 알앤비", "서정적"],
   },
   {
     id: "34",
-    title: "LG IG 운영",
+    title: "LG 인스타그램램 운영",
     category: "인스타그램 운영",
     video: videoLG,
     thumbnail: thumbLG_SNS,
@@ -481,11 +480,12 @@ export const projects: Project[] = [
   },
   {
     id: "35",
-    title: "Libratum A",
-    category: "TVCF",
+    title: "IR 이벤트",
+    category: "이벤트",
     video: videoLibratum_A,
     thumbnail: thumbLibratum_A,
-    description: "Libratum A 캠페인\n\nLibratum A 브랜드 제품 광고. 브랜드 메시지와 제품 특징을 시각적으로 전달하는 TVCF로, 톤 앤 매너 조율과 브랜드 아이덴티티 구현이 요구된 프로젝트입니다.\n\n2D Artist로 참여해 매트 페인팅과 클린업을 담당했습니다. 고화질 영상 내 불필요 요소 제거를 통한 무결점 화면 구성, 실사 소스와 그래픽 요소의 합성으로 시각적 완성도를 높였습니다.",
+    description: "TIPS 기업을 위한 글로벌 상장 및 투자 전략 세미나\n\n한국엔젤투자협회·LSEG·리브라텀 파트너스가 공동 주관한 스타트업 대상 세미나. 글로벌 상장·해외 투자 플랫폼(NASDAQ 등) 및 IR 전략을 다루는 온·오프라인 행사로, 세미나 브랜딩·홍보 시각물부터 현장 연출까지 총괄했습니다.\n\n크리에이티브 디렉터로 참여해 SNS 홍보용 그래픽·영상, 무대 연출 및 현장 감독을 담당했습니다. 온오프라인 시각물 일관성과 행사 톤을 맞추는 작업을 수행했습니다.",
+    keywords: ["리브라텀 파트너스", "엔젤투자협회", "LSEG", "TIPS", "글로벌 상장", "투자 전략 세미나", "크리에이티브 디렉터", "SNS 홍보", "무대 연출", "현장 감독", "IR 이벤트", "온오프라인 시각물"],
   },
   {
     id: "35-1",
@@ -513,22 +513,6 @@ export const projects: Project[] = [
     video: videoLOOKAS,
     thumbnail: thumbLOOKAS,
     description: "LOOKAS 브랜드 캠페인\n\nLOOKAS 브랜드 제품 광고. 브랜드 메시지와 제품 특징을 시각적으로 전달하며, 타겟에 맞는 톤과 비주얼 일관성을 유지하는 것이 목표였습니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성 작업을 수행했습니다. 화면 완성도와 브랜드 아이덴티티가 잘 드러나도록 후반 작업을 마무리했습니다.",
-  },
-  {
-    id: "38",
-    title: "MAIN 2997",
-    category: "TVCF",
-    video: videoMAIN_2997,
-    thumbnail: thumbMAIN_2997,
-    description: "메인 2997 캠페인\n\n메인 2997 브랜드 제품 TVCF. 브랜드 메시지와 제품 특징을 시각적으로 전달하며, 캠페인 톤과 비주얼 일관성이 요구된 프로젝트입니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 수행했습니다. 무결점 화면 구성과 브랜드 톤 유지로 완성도를 확보했습니다.",
-  },
-  {
-    id: "39",
-    title: "MAIN",
-    category: "TVCF",
-    video: videoMAIN,
-    thumbnail: thumbMAIN,
-    description: "메인 광고 캠페인\n\n메인 브랜드 제품 TVCF. 브랜드 메시지와 제품 포인트를 시각적으로 전달하며, 러닝 타임 내 메시지 밀도와 톤 조율이 목표였습니다.\n\n2D Artist로 참여해 매트 페인팅·클린업, 실사·그래픽 합성을 담당했습니다. 화면 완성도와 브랜드 아이덴티티가 드러나도록 마무리했습니다.",
   },
   {
     id: "40",
@@ -751,7 +735,7 @@ export const projects: Project[] = [
     thumbnail: thumb프렌치카페,
     participation: 75,
     keywords: ["프렌치카페", "카페믹스", "이보영", "김태희", "화면분할", "캘리그래피 애니메이션", "뷰티", "제품 패키지 애니메이션", "합성", "2D", "식품광고"],
-    description: "이보영, 김태희 편\n\n남양유업 프렌치카페 카페믹스 TVCF, 이보영·김태희 편. 무지방우유·25% 당 저감, 'LOVE BODY Project'·'너 뿐이야'·'좋아해' 캐치프레이즈. 화면분할·캘리그래피 구성, 프리미엄·건강 브랜드 이미지 전달.\n\n2D 아티스트로 참여하여 TVCF의 시각적 완성도를 높이는 작업을 담당했습니다. 이보영과 김태희의 뷰티 작업을 통해 모델의 피부와 이미지를 정교하게 보정하였으며, 캘리그래피 애니메이션 작업으로 '너 뿐이야', '좋아해' 등 캐치프레이즈가 감성적으로 전달되도록 구현했습니다. 제품 패키지 애니메이션을 통해 카페믹스 제품이 화면에서 역동적으로 등장하도록 연출했으며, 화면분할 애니메이션과 합성 작업으로 두 모델이 한 화면에서 조화롭게 등장하는 구도를 완성했습니다. 이를 통해 화면분할과 캘리그래피가 이끌어가는 세련된 TVCF로 프렌치카페 카페믹스의 브랜드 가치를 효과적으로 전달한 고품질의 결과물을 완성했습니다.",
+    description: "이보영, 김태희 편\n\n남양유업 프렌치카페 카페믹스 TVCF. 무지방우유·첨가물 없는 포인트를 강조한 카페믹스 광고로, 이보영·김태희 출연. 맛과 건강을 동시에 전달하는 콘셉트로 화면분할·캘리그래피 구성, 프리미엄·건강 브랜드 이미지를 담았습니다.\n\n2D 아티스트로 참여해 TVCF 시각 완성도를 담당했습니다. 이보영·김태희 뷰티 작업으로 모델 피부·이미지 보정, 캘리그래피 애니메이션으로 캐치프레이즈를 감성적으로 전달했으며, 제품 패키지 애니메이션과 화면분할·합성으로 두 모델이 한 화면에 조화롭게 등장하는 구도를 완성했습니다.",
   },
   {
     id: "64",

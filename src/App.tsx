@@ -14,6 +14,8 @@ function App() {
   const { school } = useParams<{ school: string }>();
   const schoolCopyData = getSchoolCopy(school);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [experienceCount, setExperienceCount] = useState<number | null>(null);
+  const [experienceStartIndex, setExperienceStartIndex] = useState<number | null>(null);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState<'works' | 'about' | 'contact'>('works');
   const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
@@ -25,6 +27,11 @@ function App() {
   const introInfoDelayMs = introMaskDelayMs + introMaskDurationMs + 300;
   const introContentDelayMs = introMaskDelayMs + introMaskDurationMs;
   const introTotalMs = introContentDelayMs + 500;
+
+  // 섹션 전환 시 스크롤 맨 위로 (모바일에서 Contact 등 눌렀을 때 중간에서 시작하는 문제 방지)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeSection]);
 
   // 인증 후 works 진입 시에만 인트로 실행 (비번 화면에서는 타이머 미실행)
   useEffect(() => {
@@ -69,7 +76,11 @@ function App() {
   if (!isAuthenticated) {
     return (
       <PasswordProtection
-        onAuthenticated={() => setIsAuthenticated(true)}
+        onAuthenticated={(count, startIndex) => {
+          setIsAuthenticated(true);
+          setExperienceCount(count ?? null);
+          setExperienceStartIndex(startIndex ?? null);
+        }}
         projects={projects}
         passwordPageCopy={getPasswordPageCopy(school)}
       />
@@ -109,7 +120,12 @@ function App() {
         </>
       )}
       {activeSection === 'about' && <AboutPage />}
-      {activeSection === 'contact' && <ContactPage />}
+      {activeSection === 'contact' && (
+          <ContactPage
+            maxExperienceItems={experienceCount ?? undefined}
+            experienceStartIndex={experienceStartIndex ?? undefined}
+          />
+        )}
     </div>
   );
 }

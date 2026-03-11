@@ -3,7 +3,16 @@ import { motion } from 'framer-motion';
 import { Project } from '../types';
 import type { PasswordPageCopy } from '../schoolCopy';
 
-const PASSWORD = '0515';
+/** 비밀번호별 노출: experienceCount=노출 개수, experienceStartIndex=건너뛸 처음 개수(해당 항목 숨김) */
+const PASSWORD_CONFIG: { password: string; experienceCount?: number; experienceStartIndex?: number }[] = [
+  { password: '0515', experienceCount: 7 }, // 전체
+  { password: '1234', experienceCount: 4 }, // 상위 4개만
+  { password: '0823', experienceStartIndex: 1 }, // 첫 번째(리브라텀 파트너스) 숨김, 나머지 6개 노출
+];
+
+const AUTH_STORAGE_KEY = 'portfolio_authenticated';
+const EXPERIENCE_COUNT_KEY = 'portfolio_experience_count';
+const EXPERIENCE_START_KEY = 'portfolio_experience_start';
 
 const defaultCopy: PasswordPageCopy = {
   title: 'PORTFOLIO',
@@ -15,7 +24,8 @@ const defaultCopy: PasswordPageCopy = {
 };
 
 export interface PasswordProtectionProps {
-  onAuthenticated: () => void;
+  /** 인증 성공 시 호출. (노출 개수, 건너뛸 처음 개수) → 건너뛴 뒤 그만큼만 노출 */
+  onAuthenticated: (experienceCount?: number, experienceStartIndex?: number) => void;
   projects?: Project[];
   passwordPageCopy?: PasswordPageCopy;
 }
@@ -49,9 +59,16 @@ const PasswordProtection = ({ onAuthenticated, projects = [], passwordPageCopy }
 
   // 로컬 스토리지에서 인증 상태 확인
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('portfolio_authenticated');
+    const isAuthenticated = localStorage.getItem(AUTH_STORAGE_KEY);
     if (isAuthenticated === 'true') {
-      onAuthenticated();
+      const count = localStorage.getItem(EXPERIENCE_COUNT_KEY);
+      const start = localStorage.getItem(EXPERIENCE_START_KEY);
+      const experienceCount = count != null ? parseInt(count, 10) : undefined;
+      const experienceStartIndex = start != null ? parseInt(start, 10) : undefined;
+      onAuthenticated(
+        Number.isNaN(experienceCount) ? undefined : experienceCount,
+        Number.isNaN(experienceStartIndex) ? undefined : experienceStartIndex
+      );
     }
   }, [onAuthenticated]);
 
@@ -62,9 +79,20 @@ const PasswordProtection = ({ onAuthenticated, projects = [], passwordPageCopy }
 
     // 약간의 딜레이로 자연스러운 UX
     setTimeout(() => {
-      if (password === PASSWORD) {
-        localStorage.setItem('portfolio_authenticated', 'true');
-        onAuthenticated();
+      const matched = PASSWORD_CONFIG.find((c) => c.password === password);
+      if (matched) {
+        localStorage.setItem(AUTH_STORAGE_KEY, 'true');
+        if (matched.experienceCount != null) {
+          localStorage.setItem(EXPERIENCE_COUNT_KEY, String(matched.experienceCount));
+        } else {
+          localStorage.removeItem(EXPERIENCE_COUNT_KEY);
+        }
+        if (matched.experienceStartIndex != null) {
+          localStorage.setItem(EXPERIENCE_START_KEY, String(matched.experienceStartIndex));
+        } else {
+          localStorage.removeItem(EXPERIENCE_START_KEY);
+        }
+        onAuthenticated(matched.experienceCount, matched.experienceStartIndex);
       } else {
         setError(true);
         setPassword('');

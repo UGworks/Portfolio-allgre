@@ -1,10 +1,18 @@
 import { motion } from 'framer-motion';
 import { info } from '../data';
+import seonghunImage from '../IMG/seonghun.jpg';
 
-const ContactPage = () => {
+interface ContactPageProps {
+  /** 비밀번호별로 노출할 경력 개수 (없으면 전부) */
+  maxExperienceItems?: number;
+  /** 건너뛸 처음 경력 개수 (해당 항목들 숨김) */
+  experienceStartIndex?: number;
+}
+
+const ContactPage = ({ maxExperienceItems, experienceStartIndex = 0 }: ContactPageProps) => {
   const experience = [
     {
-      company: '리브라텀 파트너스 (Libratum Partners)',
+      company: '리브라텀 파트너스',
       role: '크리에이티브 디렉터',
       period: '2025.03 – 현재',
       items: [
@@ -14,7 +22,7 @@ const ContactPage = () => {
       ],
     },
     {
-      company: '오픈익스체인지 (OpenExchange)',
+      company: '오픈익스체인지',
       role: '아트 디렉터',
       period: '2023.09 – 2025.01',
       items: [
@@ -24,17 +32,17 @@ const ContactPage = () => {
       ],
     },
     {
-      company: '미디어파사드 프로젝트 (개인 작가)',
-      role: '독립 작가',
-      period: '– 현재',
+      company: '미디어파사드 프로젝트',
+      role: '프리랜서',
+      period: '2022 – 현재',
       items: [
-        '광명동굴 빛의 동굴 — 대형 곡면 구조물 대상 관람 거리 기반 영상 설계 및 왜곡 보정',
-        '아라온 테마파크 — 다중 픽셀 피치 LED 패널 기반 공간 영상 시각 구조 최적화',
-        '김해 가야테마파크 — 입체 조형물 대상 프로젝션 매핑 콘텐츠 제작',
+        '아라온 테마파크 2025 / 다중 픽셀 피치 LED 패널 기반 공간 영상 시각 구조 최적화',
+        '김해 가야테마파크 2024 / 입체 조형물 대상 프로젝션 매핑 콘텐츠 제작',
+        '빛의 공간 2022·2023 / 대형 곡면 구조물 대상 관람 거리 기반 영상 설계 및 왜곡 보정',
       ],
     },
     {
-      company: '콘센트릭스 카탈리스트 (Concentrix Catalyst)',
+      company: '콘센트릭스 카탈리스트',
       role: '모션 콘텐츠 팀 리더',
       period: '2020.02 – 2023.08',
       items: [
@@ -44,7 +52,7 @@ const ContactPage = () => {
       ],
     },
     {
-      company: '키스톤 플레이 (Keystone Play)',
+      company: '키스톤 플레이',
       role: '2D 테크니컬 디렉터',
       period: '2015.09 – 2019.11',
       items: [
@@ -54,7 +62,7 @@ const ContactPage = () => {
       ],
     },
     {
-      company: '포스트포엠 (Postpoem)',
+      company: '포스트포엠',
       role: '선임 2D 아티스트',
       period: '2014.10 – 2015.09',
       items: [
@@ -64,7 +72,7 @@ const ContactPage = () => {
       ],
     },
     {
-      company: '빅슨 스튜디오 (Vixen Studios)',
+      company: '빅슨 스튜디오',
       role: '2D 아티스트',
       period: '2012.07 – 2014.10',
       items: [
@@ -119,16 +127,17 @@ const ContactPage = () => {
         </div>
 
         {/* 메인 컨텐츠 영역 */}
-        <div className="flex-1 overflow-y-auto md:mr-96" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden md:mr-96" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <div className="max-w-[850px] mx-auto px-5 py-10 md:px-10 md:py-10">
 
-            {/* 사진 영역 (더미) */}
-            <div className="mb-10 flex justify-center md:justify-start">
-              <div
-                className="w-40 h-52 md:w-48 md:h-60 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-sm"
-                aria-hidden
-              >
-                사진
+            {/* 프로필 사진: 모바일·PC 모두 3:4 프레임 유지 */}
+            <div className="mb-10 flex justify-center md:justify-start relative left-1/2 -translate-x-1/2 w-screen max-w-[100vw] md:left-0 md:translate-x-0 md:w-auto overflow-visible">
+              <div className="w-[60%] max-w-[12rem] aspect-[3/4] md:w-48 md:h-60 rounded-none md:rounded overflow-hidden bg-black">
+                <img
+                  src={seonghunImage}
+                  alt="이성훈 프로필 사진"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
@@ -143,7 +152,7 @@ const ContactPage = () => {
 
               {/* ── PROFESSIONAL PROFILE ── */}
               <section className="mb-8">
-                <h2 className="text-lg font-bold border-b border-gray-300 pb-1 mb-4 uppercase tracking-wide">연구자 프로필</h2>
+                <h2 className="text-lg font-bold border-b border-gray-300 pb-1 mb-4 uppercase tracking-wide">지원자 프로필</h2>
                 <p className="text-[14.5px] text-gray-700 leading-[1.75]">
                   13년간 영상 제작 및 IR 콘텐츠 현장에서 활동하며, 기업 커뮤니케이션 구조와 제작 시스템의 한계를 경험해왔습니다.
                   AI 기술 발전 속에서도 전통적 촬영 중심에 머무는 IR 구조를 재설계하고자 하며,
@@ -166,14 +175,14 @@ const ContactPage = () => {
               {/* ── EXPERIENCE ── */}
               <section className="mb-8">
                 <h2 className="text-lg font-bold border-b border-gray-300 pb-1 mb-4 uppercase tracking-wide">경력</h2>
-                {experience.map((job, i) => (
+                {experience
+                .slice(experienceStartIndex, experienceStartIndex + (maxExperienceItems ?? experience.length - experienceStartIndex))
+                .map((job, i) => (
                   <div key={i} className="mb-6">
-                    <div className="flex flex-wrap justify-between gap-2 mb-1">
-                      <div className="leading-tight">
-                        <div className="font-semibold text-gray-900">{job.company}</div>
-                        <div className="text-gray-500 text-sm font-normal -mt-px">{job.role}</div>
-                      </div>
-                      <span className="text-gray-600 text-sm whitespace-nowrap self-start">{job.period}</span>
+                    {/* 모바일: 회사/직책 → 다음 줄 기간. PC: 한 줄에 회사/직책(왼쪽) + 기간(오른쪽) */}
+                    <div className="leading-tight mb-1 md:flex md:flex-wrap md:justify-between md:items-baseline md:gap-2">
+                      <div className="font-semibold text-gray-900">{job.company} / {job.role}</div>
+                      <span className="text-sm text-gray-600 font-normal mt-0.5 block md:mt-0 md:flex-shrink-0 md:whitespace-nowrap">{job.period}</span>
                     </div>
                     <ul className="list-disc pl-5 mt-1 space-y-1 text-[14.5px]">
                       {job.items.map((item, j) => (
@@ -187,20 +196,20 @@ const ContactPage = () => {
               {/* ── EDUCATION ── */}
               <section className="mb-8">
                 <h2 className="text-lg font-bold border-b border-gray-300 pb-1 mb-4 uppercase tracking-wide">학력</h2>
-                <div className="mb-4 leading-tight">
-                  <div className="flex flex-wrap justify-between gap-2 font-semibold">
-                    <span>숭실대학교 글로벌미래교육원 / 시각디자인학 학사</span>
-                    <span className="text-gray-600 text-sm">2026. 02</span>
-                  </div>
-                  <p className="text-sm text-gray-600 -mt-px">평점평균: 3.95 / 4.5</p>
-                </div>
-                <div className="leading-tight">
-                  <div className="flex flex-wrap justify-between gap-2 font-semibold">
-                    <span>한국폴리텍5대학 / 전문학사 (멀티미디어학과)</span>
-                    <span className="text-gray-600 text-sm">2009. 02</span>
-                  </div>
-                  <p className="text-sm text-gray-600 -mt-px">평점평균: 3.95 / 4.5</p>
-                </div>
+                <ul className="space-y-5">
+                  {[
+                    { school: '숭실대학교 글로벌미래교육원 (학점은행제) / 시각디자인학 학사', date: '2026. 02', gpa: '3.91' },
+                    { school: '한국폴리텍5대학 / 멀티미디어학과', date: '2009. 02', gpa: '3.95' },
+                  ].map(({ school, date, gpa }, i) => (
+                    <li key={i} className="block border-b border-gray-100 pb-5 last:border-0 last:pb-0 last:mb-0">
+                      <div className="flex flex-wrap justify-between gap-x-3 gap-y-0.5 items-baseline">
+                        <span className="font-semibold text-gray-900">{school}</span>
+                        <span className="text-sm text-gray-600 font-normal flex-shrink-0 whitespace-nowrap">{date}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 font-normal mt-1">평점평균: {gpa} / 4.5</p>
+                    </li>
+                  ))}
+                </ul>
               </section>
 
               {/* ── CERTIFICATIONS & TECHNICAL SKILLS ── */}
